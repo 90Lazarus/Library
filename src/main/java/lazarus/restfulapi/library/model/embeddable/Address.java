@@ -3,8 +3,8 @@ package lazarus.restfulapi.library.model.embeddable;
 import lombok.*;
 import javax.persistence.Embeddable;
 
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor
 @Embeddable
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class Address {
     private String country;
     private String state;

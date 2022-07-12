@@ -39,10 +39,10 @@ public class Book {
     private Integer numberOfPages;
 
     @Enumerated(EnumType.STRING) @Column(nullable = false)
-    private FormatType format;
+    private FormatType formatType;
 
     @OneToMany(mappedBy = "book")
-    private Set<Genre> genres;
+    private Set<Genre> genre;
 
     @Column(length = 8192)
     private String plot;
