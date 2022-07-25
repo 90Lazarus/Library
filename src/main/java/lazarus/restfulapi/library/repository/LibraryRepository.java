@@ -1,6 +1,6 @@
 package lazarus.restfulapi.library.repository;
 
-import lazarus.restfulapi.library.model.Library;
+import lazarus.restfulapi.library.model.entity.Library;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

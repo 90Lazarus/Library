@@ -1,10 +1,10 @@
 package lazarus.restfulapi.library.repository;
 
-import lazarus.restfulapi.library.model.entity.Language;
+import lazarus.restfulapi.library.model.entity.Genre;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface LanguageRepository extends JpaRepository<Language, Long> {
+public interface GenreRepository extends JpaRepository<Genre, Long> {
 
 }

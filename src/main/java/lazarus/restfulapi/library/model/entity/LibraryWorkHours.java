@@ -1,6 +1,7 @@
-package lazarus.restfulapi.library.model;
+package lazarus.restfulapi.library.model.entity;
 
 import lombok.*;
+
 import javax.persistence.*;
 import java.sql.Time;
 import java.time.DayOfWeek;

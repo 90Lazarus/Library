@@ -1,5 +1,6 @@
-package lazarus.restfulapi.library.model;
+package lazarus.restfulapi.library.model.entity;
 
+import lazarus.restfulapi.library.model.entity.Book;
 import lombok.*;
 import javax.persistence.*;
 

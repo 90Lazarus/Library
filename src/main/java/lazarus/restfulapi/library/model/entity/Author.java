@@ -1,4 +1,4 @@
-package lazarus.restfulapi.library.model;
+package lazarus.restfulapi.library.model.entity;
 
 import lazarus.restfulapi.library.model.enumerated.Gender;
 import lombok.*;

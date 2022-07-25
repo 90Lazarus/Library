@@ -1,4 +1,4 @@
-package lazarus.restfulapi.library.model;
+package lazarus.restfulapi.library.model.entity;
 
 import lazarus.restfulapi.library.model.enumerated.FormatType;
 import lombok.*;
@@ -49,7 +49,7 @@ public class Book {
 
     private Integer isbn;
 
-    @ManyToOne @JoinColumn(name = "library_id", nullable = false)
+    @ManyToOne @JoinColumn(name = "library_id")
     private Library library;
 
     @OneToOne(mappedBy = "book")

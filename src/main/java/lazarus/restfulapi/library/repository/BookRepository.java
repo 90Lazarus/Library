@@ -1,6 +1,6 @@
 package lazarus.restfulapi.library.repository;
 
-import lazarus.restfulapi.library.model.Book;
+import lazarus.restfulapi.library.model.entity.Book;
 import lazarus.restfulapi.library.model.enumerated.FormatType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

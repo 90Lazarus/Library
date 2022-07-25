@@ -1,6 +1,7 @@
 package lazarus.restfulapi.library;
 
-import lazarus.restfulapi.library.model.*;
+import lazarus.restfulapi.library.model.embeddable.Address;
+import lazarus.restfulapi.library.model.entity.*;
 import lazarus.restfulapi.library.model.enumerated.FormatType;
 import lazarus.restfulapi.library.model.enumerated.Gender;
 import lazarus.restfulapi.library.repository.*;
@@ -12,7 +13,7 @@ import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.HashSet;
+import java.time.Year;
 import java.util.Set;
 
 @SpringBootApplication
@@ -28,8 +29,16 @@ public class OnlineLibraryApplication {
 		SpringApplication.run(OnlineLibraryApplication.class, args);
 	}
 
-	Library library1 = Library.builder()
-			.name("The Library")
+	Library libraryBG = Library.builder()
+			.name("Belgrade library")
+			.yearEstablished(Year.of(1895))
+			.address(new Address("Serbia", "Serbia", "Belgrade", "White Street", "26"))
+			.build();
+
+	Library libraryNS = Library.builder()
+			.name("Novi Sad library")
+			.yearEstablished(Year.of(1923))
+			.address(new Address("Serbia", "Serbia", "Novi Sad", "New Street", "86"))
 			.build();
 
 	Publisher publisher1 = Publisher.builder()
@@ -56,16 +65,29 @@ public class OnlineLibraryApplication {
 			.language(Set.of(languageEnglish))
 			.publisher(publisher1)
 			.formatType(FormatType.HARDCOVER)
-			.library(library1)
+			//.library(libraryBG)
 			.build();
+
+	Book book2 = Book.builder()
+			.title("Harry Potter and the Philosopher's Stone")
+			.author(Set.of(author1))
+			.language(Set.of(languageEnglish))
+			.publisher(publisher1)
+			.formatType(FormatType.HARDCOVER)
+			//.library(libraryBG)
+			.build();
+
 	@Bean
 	InitializingBean sendDatabase() {
 		return () -> {
-			libraryRepository.save(library1);
+			libraryRepository.save(libraryBG);
+			libraryRepository.save(libraryNS);
+
 			publisherRepository.save(publisher1);
 			authorRepository.save(author1);
 			languageRepository.save(languageEnglish);
 			bookRepository.save(book1);
+			bookRepository.save(book2);
 		};
 	}
 }

@@ -1,6 +1,6 @@
 package lazarus.restfulapi.library.repository;
 
-import lazarus.restfulapi.library.model.Author;
+import lazarus.restfulapi.library.model.entity.Author;
 import lazarus.restfulapi.library.model.enumerated.Gender;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
