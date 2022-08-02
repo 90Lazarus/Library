@@ -13,7 +13,7 @@ public class ErrorInfo {
     }
 
     public enum ResourceType {
-        LIBRARY
+        LIBRARY_WORKING_HOUR, LIBRARY
     }
 
 }

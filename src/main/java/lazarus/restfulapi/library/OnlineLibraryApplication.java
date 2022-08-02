@@ -11,10 +11,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.sql.Time;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
+import java.util.Arrays;
 import java.util.Set;
+import java.util.stream.Stream;
 
 @SpringBootApplication
 public class OnlineLibraryApplication {
@@ -22,6 +26,7 @@ public class OnlineLibraryApplication {
 	@Autowired private BookRepository bookRepository;
 	@Autowired private LanguageRepository languageRepository;
 	@Autowired private LibraryRepository libraryRepository;
+	@Autowired private LibraryWorkingHourRepository libraryWorkingHourRepository;
 	@Autowired private PublisherRepository publisherRepository;
 	@Autowired private UserRepository userRepository;
 
@@ -32,13 +37,40 @@ public class OnlineLibraryApplication {
 	Library libraryBG = Library.builder()
 			.name("Belgrade library")
 			.yearEstablished(Year.of(1895))
-			.address(new Address("Serbia", "Serbia", "Belgrade", "White Street", "26"))
+			.address(new Address("Serbia", "", "Belgrade", "White Street", 26))
 			.build();
 
 	Library libraryNS = Library.builder()
 			.name("Novi Sad library")
 			.yearEstablished(Year.of(1923))
-			.address(new Address("Serbia", "Serbia", "Novi Sad", "New Street", "86"))
+			.address(new Address("Serbia", "", "Novi Sad", "New Street", 86))
+			.build();
+
+	Library libraryNI = Library.builder()
+			.name("Nis library")
+			.yearEstablished(Year.of(1932))
+			.address(new Address("Serbia", "", "Nis", "Nisa", 17))
+			.build();
+
+	LibraryWorkingHour LWHMonday = LibraryWorkingHour.builder()
+			.dayOfWeek(DayOfWeek.MONDAY)
+			.openingTime(Time.valueOf("08:00:00"))
+			.closingTime(Time.valueOf("20:00:00"))
+			.library(libraryBG)
+			.build();
+
+	LibraryWorkingHour LWHTuesday = LibraryWorkingHour.builder()
+			.dayOfWeek(DayOfWeek.TUESDAY)
+			.openingTime(Time.valueOf("08:00:00"))
+			.closingTime(Time.valueOf("20:00:00"))
+			.library(libraryBG)
+			.build();
+
+	LibraryWorkingHour LWHWednesday = LibraryWorkingHour.builder()
+			.dayOfWeek(DayOfWeek.WEDNESDAY)
+			.openingTime(Time.valueOf("08:00:00"))
+			.closingTime(Time.valueOf("20:00:00"))
+			.library(libraryBG)
 			.build();
 
 	Publisher publisher1 = Publisher.builder()
@@ -65,7 +97,6 @@ public class OnlineLibraryApplication {
 			.language(Set.of(languageEnglish))
 			.publisher(publisher1)
 			.formatType(FormatType.HARDCOVER)
-			//.library(libraryBG)
 			.build();
 
 	Book book2 = Book.builder()
@@ -74,14 +105,18 @@ public class OnlineLibraryApplication {
 			.language(Set.of(languageEnglish))
 			.publisher(publisher1)
 			.formatType(FormatType.HARDCOVER)
-			//.library(libraryBG)
 			.build();
 
 	@Bean
-	InitializingBean sendDatabase() {
+	InitializingBean sendDatabase2() {
 		return () -> {
 			libraryRepository.save(libraryBG);
 			libraryRepository.save(libraryNS);
+			libraryRepository.save(libraryNI);
+
+			libraryWorkingHourRepository.save(LWHMonday);
+			libraryWorkingHourRepository.save(LWHTuesday);
+			libraryWorkingHourRepository.save(LWHWednesday);
 
 			publisherRepository.save(publisher1);
 			authorRepository.save(author1);
