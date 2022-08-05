@@ -26,7 +26,7 @@ public class LibraryService {
     }
 
     public Library getLibraryById(Long id) throws ResourceNotFoundException {
-        return libraryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ErrorInfo.ResourceType.LIBRARY));
+        return libraryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ErrorInfo.ResourceType.LIBRARY, id));
     }
 
     public Library updateLibrary(Long id, Library newLibrary) throws ResourceNotFoundException {
@@ -36,7 +36,7 @@ public class LibraryService {
             oldLibrary.setName(newLibrary.getName());
             oldLibrary.setYearEstablished(newLibrary.getYearEstablished());
             oldLibrary.setAddress(newLibrary.getAddress());
-            oldLibrary.setWorkingHours(newLibrary.getWorkingHours());
+            oldLibrary.setWorkingTime(newLibrary.getWorkingTime());
             oldLibrary.setWebsite(newLibrary.getWebsite());
             return libraryRepository.save(oldLibrary);
         }

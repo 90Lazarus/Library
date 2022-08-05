@@ -26,7 +26,7 @@ public class Library {
     private Address address;
 
     @OneToMany(mappedBy = "library")
-    private List<LibraryWorkingHour> workingHours;
+    private List<LibraryWorkingTime> workingTime;
 
     @Transient
     private boolean isOpen;

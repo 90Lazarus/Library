@@ -16,9 +16,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
-import java.util.Arrays;
 import java.util.Set;
-import java.util.stream.Stream;
 
 @SpringBootApplication
 public class OnlineLibraryApplication {
@@ -26,7 +24,7 @@ public class OnlineLibraryApplication {
 	@Autowired private BookRepository bookRepository;
 	@Autowired private LanguageRepository languageRepository;
 	@Autowired private LibraryRepository libraryRepository;
-	@Autowired private LibraryWorkingHourRepository libraryWorkingHourRepository;
+	@Autowired private LibraryWorkingTimeRepository libraryWorkingTimeRepository;
 	@Autowired private PublisherRepository publisherRepository;
 	@Autowired private UserRepository userRepository;
 
@@ -52,21 +50,21 @@ public class OnlineLibraryApplication {
 			.address(new Address("Serbia", "", "Nis", "Nisa", 17))
 			.build();
 
-	LibraryWorkingHour LWHMonday = LibraryWorkingHour.builder()
+	LibraryWorkingTime LWHMonday = LibraryWorkingTime.builder()
 			.dayOfWeek(DayOfWeek.MONDAY)
 			.openingTime(Time.valueOf("08:00:00"))
 			.closingTime(Time.valueOf("20:00:00"))
 			.library(libraryBG)
 			.build();
 
-	LibraryWorkingHour LWHTuesday = LibraryWorkingHour.builder()
+	LibraryWorkingTime LWHTuesday = LibraryWorkingTime.builder()
 			.dayOfWeek(DayOfWeek.TUESDAY)
 			.openingTime(Time.valueOf("08:00:00"))
 			.closingTime(Time.valueOf("20:00:00"))
 			.library(libraryBG)
 			.build();
 
-	LibraryWorkingHour LWHWednesday = LibraryWorkingHour.builder()
+	LibraryWorkingTime LWHWednesday = LibraryWorkingTime.builder()
 			.dayOfWeek(DayOfWeek.WEDNESDAY)
 			.openingTime(Time.valueOf("08:00:00"))
 			.closingTime(Time.valueOf("20:00:00"))
@@ -108,15 +106,15 @@ public class OnlineLibraryApplication {
 			.build();
 
 	@Bean
-	InitializingBean sendDatabase2() {
+	InitializingBean sendDatabase() {
 		return () -> {
 			libraryRepository.save(libraryBG);
 			libraryRepository.save(libraryNS);
 			libraryRepository.save(libraryNI);
 
-			libraryWorkingHourRepository.save(LWHMonday);
-			libraryWorkingHourRepository.save(LWHTuesday);
-			libraryWorkingHourRepository.save(LWHWednesday);
+			libraryWorkingTimeRepository.save(LWHMonday);
+			libraryWorkingTimeRepository.save(LWHTuesday);
+			libraryWorkingTimeRepository.save(LWHWednesday);
 
 			publisherRepository.save(publisher1);
 			authorRepository.save(author1);

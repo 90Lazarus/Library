@@ -13,7 +13,7 @@ public class ErrorInfo {
     }
 
     public enum ResourceType {
-        LIBRARY_WORKING_HOUR, LIBRARY
+        LIBRARY_WORKING_TIME { @Override public String toString() { return "'Working time'"; } },
+        LIBRARY { @Override public String toString() { return "'Library'"; } }
     }
-
 }
