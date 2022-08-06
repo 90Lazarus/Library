@@ -4,10 +4,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lazarus.restfulapi.library.exception.ResourceNotFoundException;
-import lazarus.restfulapi.library.model.entity.Book;
-import lazarus.restfulapi.library.model.entity.Library;
+import lazarus.restfulapi.library.model.dto.LibraryDTO;
 import lazarus.restfulapi.library.service.LibraryService;
-import lazarus.restfulapi.library.service.LibraryWorkingTimeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
@@ -16,53 +15,32 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(path = "libraries", produces = MediaType.APPLICATION_JSON_VALUE)
 public class LibraryController {
 
-    @Autowired
-    private LibraryService libraryService;
-
-    @Autowired
-    private LibraryWorkingTimeService libraryWorkingTimeService;
+    @Autowired private LibraryService libraryService;
 
     @GetMapping
     @Operation(summary = "Get the list of all available libraries, optionally sorted by parameters")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Found all libraries")
+            @ApiResponse(responseCode = "200", description = "Found libraries in the database"),
+            @ApiResponse(responseCode = "404", description = "No libraries found in the database")
     })
-    public List<Library> getAllLibraries(@RequestParam(required = false, defaultValue = "0") Integer page,
-                                         @RequestParam(required = false, defaultValue = "10") Integer size,
-                                         @RequestParam(required = false, defaultValue = "ASC") Sort.Direction direction,
-                                         @RequestParam(required = false, defaultValue = "id") String sortBy) {
+    public List<LibraryDTO> getAllLibraries(@RequestParam(required = false, defaultValue = "0") Integer page,
+                                            @RequestParam(required = false, defaultValue = "10") Integer size,
+                                            @RequestParam(required = false, defaultValue = "ASC") Sort.Direction direction,
+                                            @RequestParam(required = false, defaultValue = "id") String sortBy) {
         return libraryService.getAllLibraries(page, size, direction, sortBy);
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Get the job with the following id")
+    @Operation(summary = "View the library with an id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found the library")
     })
-    public Library getLibraryById(@PathVariable("id") Long id) throws ResourceNotFoundException {
+    public LibraryDTO getLibraryById(@PathVariable("id") Long id) throws ResourceNotFoundException {
         return libraryService.getLibraryById(id);
-    }
-
-//    @GetMapping("/{id}/working_hours")
-//    @Operation(summary = "Get the working time for the library with the following id")
-//    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "200", description = "Found the working time"),
-//            @ApiResponse(responseCode = "404", description = "Can not find the working time"),
-//    })
-//    public List<LibraryWorkingTime> getLibraryWorkingHours(@PathVariable("id") Long id) throws ResourceNotFoundException {
-//        return libraryService.getLibraryById(id).getWorkingTime();
-//    }
-
-    @GetMapping("/{id}/books")
-    @Operation(summary = "Get the list of all books in the library with the following id")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Found the books")
-    })
-    public List<Book> getBooks(@PathVariable Long id) throws ResourceNotFoundException {
-        return libraryService.getLibraryById(id).getBooks().stream().toList();
     }
 
     @PostMapping
@@ -70,28 +48,21 @@ public class LibraryController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "New library created")
     })
-    public Library saveLibrary(@RequestBody Library library) {
-        return libraryService.createLibrary(library);
+    public LibraryDTO saveLibrary(@RequestBody LibraryDTO libraryDTO) {
+        return libraryService.createLibrary(libraryDTO);
     }
 
-//    @PostMapping("/{id}")
-//    @Operation(summary = "Create a working hours for the library")
-//    public List<LibraryWorkingTime> saveLibraryWorkingHour(@PathVariable("id") Long id, @RequestBody LibraryWorkingTime libraryWorkingTime) throws ResourceNotFoundException {
-//        libraryWorkingTimeService.createLibraryWorkingTimeInLibrary(id, libraryWorkingTime);
-//        return libraryService.getLibraryById(id).getWorkingTime();
-//    }
-
     @PutMapping("/{id}")
-    @Operation(summary = "Update the contents of the library with the following id")
+    @Operation(summary = "Modify a library with an id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Library updated")
     })
-    public Library updateLibrary(@PathVariable("id") Long id, @RequestBody Library library) throws ResourceNotFoundException {
-        return libraryService.updateLibrary(id, library);
+    public LibraryDTO updateLibrary(@PathVariable("id") Long id, @RequestBody LibraryDTO libraryDTO) throws ResourceNotFoundException {
+        return libraryService.updateLibrary(id, libraryDTO);
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Delete the library with the following id")
+    @Operation(summary = "Delete a library with the an id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Library deleted")
     })

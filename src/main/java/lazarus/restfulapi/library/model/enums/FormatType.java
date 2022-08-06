@@ -1,4 +1,4 @@
-package lazarus.restfulapi.library.model.enumerated;
+package lazarus.restfulapi.library.model.enums;
 
 public enum FormatType {
     PAPERBACK, HARDCOVER, EBOOK, AUDIOBOOK,

@@ -1,6 +1,7 @@
 package lazarus.restfulapi.library.model.embeddable;
 
 import lombok.*;
+
 import javax.persistence.Embeddable;
 
 @Embeddable

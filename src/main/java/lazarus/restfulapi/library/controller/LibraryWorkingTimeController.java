@@ -5,17 +5,18 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lazarus.restfulapi.library.exception.ResourceNotFoundException;
-import lazarus.restfulapi.library.model.entity.LibraryWorkingTime;
+import lazarus.restfulapi.library.model.dto.LibraryWorkingTimeDTO;
 import lazarus.restfulapi.library.service.LibraryWorkingTimeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 public class LibraryWorkingTimeController {
     @Autowired private LibraryWorkingTimeService libraryWorkingTimeService;
@@ -26,7 +27,7 @@ public class LibraryWorkingTimeController {
             @ApiResponse(responseCode = "200", description = "Found all working time for the library with the id"),
             @ApiResponse(responseCode = "404", description = "Library with the id has no working time")
     })
-    public List<LibraryWorkingTime> getAllLibraryWorkingTime(@Parameter(description = "id of the library") @PathVariable("libraryId") Long libraryId) throws ResourceNotFoundException {
+    public List<LibraryWorkingTimeDTO> getAllLibraryWorkingTime(@Parameter(description = "id of the library") @PathVariable("libraryId") Long libraryId) throws ResourceNotFoundException {
         return libraryWorkingTimeService.readLibraryWorkingTime(libraryId);
     }
 
@@ -36,7 +37,7 @@ public class LibraryWorkingTimeController {
             @ApiResponse(responseCode = "200", description = "Found the working time with the id for the library with the id"),
             @ApiResponse(responseCode = "404", description = "Can not find the entry in the database that matches the specified ids")
     })
-    public LibraryWorkingTime getOneLibraryWorkingTime(@Parameter(description = "id of the library") @PathVariable("libraryId") Long libraryId, @Parameter(description = "id of the working time") @PathVariable("workingTimeId") Long workingTimeId) throws ResourceNotFoundException {
+    public LibraryWorkingTimeDTO getOneLibraryWorkingTime(@Parameter(description = "id of the library") @PathVariable("libraryId") Long libraryId, @Parameter(description = "id of the working time") @PathVariable("workingTimeId") Long workingTimeId) throws ResourceNotFoundException {
         return libraryWorkingTimeService.readLibraryWorkingTimeById(libraryId, workingTimeId);
     }
 
@@ -46,8 +47,8 @@ public class LibraryWorkingTimeController {
             @ApiResponse(responseCode = "200", description = "Created new working time for the library with the id"),
             @ApiResponse(responseCode = "404", description = "Library with the id does not exist")
     })
-    public List<LibraryWorkingTime> saveLibraryWorkingTime(@Parameter(description = "id of the library") @PathVariable("libraryId") Long libraryId, @Valid @RequestBody LibraryWorkingTime libraryWorkingTime) throws ResourceNotFoundException {
-        return libraryWorkingTimeService.createLibraryWorkingTimeById(libraryId, libraryWorkingTime);
+    public List<LibraryWorkingTimeDTO> saveLibraryWorkingTime(@Parameter(description = "id of the library") @PathVariable("libraryId") Long libraryId, @Valid @RequestBody LibraryWorkingTimeDTO libraryWorkingTimeDTO) throws ResourceNotFoundException {
+        return libraryWorkingTimeService.createLibraryWorkingTimeById(libraryId, libraryWorkingTimeDTO);
     }
 
     @PutMapping("/libraries/{libraryId}/working_time/{workingTimeId}")
@@ -56,8 +57,8 @@ public class LibraryWorkingTimeController {
             @ApiResponse(responseCode = "200", description = "Modified the working time with the id for the library with the id"),
             @ApiResponse(responseCode = "404", description = "Can not find the entry in the database that matches the specified ids")
     })
-    public LibraryWorkingTime updateLibraryWorkingTime(@Parameter(description = "id of the library") @PathVariable("libraryId") Long libraryId, @Parameter(description = "id of the working time") @PathVariable("workingTimeId") Long workingTimeId, @Valid @RequestBody LibraryWorkingTime libraryWorkingTime) throws ResourceNotFoundException {
-        return libraryWorkingTimeService.updateLibraryWorkingTime(libraryId, workingTimeId, libraryWorkingTime);
+    public LibraryWorkingTimeDTO updateLibraryWorkingTime(@Parameter(description = "id of the library") @PathVariable("libraryId") Long libraryId, @Parameter(description = "id of the working time") @PathVariable("workingTimeId") Long workingTimeId, @Valid @RequestBody LibraryWorkingTimeDTO libraryWorkingTimeDTO) throws ResourceNotFoundException {
+        return libraryWorkingTimeService.updateLibraryWorkingTime(libraryId, workingTimeId, libraryWorkingTimeDTO);
     }
 
     @Operation(summary = "Delete a working time with an id for a library with an id")

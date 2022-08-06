@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lazarus.restfulapi.library.model.embeddable.Address;
 import lombok.*;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.Year;
 import java.util.List;
 import java.util.Set;
@@ -17,7 +18,7 @@ public class Library {
     @Column(name = "library_id")
     private Long id;
 
-    @Column(nullable = false)
+    @NotNull
     private String name;
 
     private Year yearEstablished;

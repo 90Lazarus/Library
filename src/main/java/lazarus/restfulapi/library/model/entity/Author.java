@@ -1,6 +1,6 @@
 package lazarus.restfulapi.library.model.entity;
 
-import lazarus.restfulapi.library.model.enumerated.Gender;
+import lazarus.restfulapi.library.model.enums.Gender;
 import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDate;

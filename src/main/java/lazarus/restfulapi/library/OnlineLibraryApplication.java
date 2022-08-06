@@ -2,8 +2,8 @@ package lazarus.restfulapi.library;
 
 import lazarus.restfulapi.library.model.embeddable.Address;
 import lazarus.restfulapi.library.model.entity.*;
-import lazarus.restfulapi.library.model.enumerated.FormatType;
-import lazarus.restfulapi.library.model.enumerated.Gender;
+import lazarus.restfulapi.library.model.enums.FormatType;
+import lazarus.restfulapi.library.model.enums.Gender;
 import lazarus.restfulapi.library.repository.*;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
