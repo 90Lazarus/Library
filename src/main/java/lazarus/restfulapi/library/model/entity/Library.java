@@ -30,7 +30,7 @@ public class Library {
     private List<LibraryWorkingTime> workingTime;
 
     @Transient
-    private boolean isOpen;
+    private Boolean open;
 
     private String website;
 

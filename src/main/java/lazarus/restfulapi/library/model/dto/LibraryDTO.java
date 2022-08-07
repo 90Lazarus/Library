@@ -6,6 +6,7 @@ import lazarus.restfulapi.library.model.entity.Book;
 import lazarus.restfulapi.library.model.entity.LibraryWorkingTime;
 import lombok.Data;
 
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import java.time.Year;
 import java.util.List;
@@ -29,12 +30,14 @@ public class LibraryDTO {
     @Schema(description = "Library working hours")
     private List<LibraryWorkingTime> workingTime;
 
-    private boolean isOpen;
+    @Transient
+    private Boolean open;
 
     @Schema(description = "Library website", example = "library.com")
     private String website;
 
     private Set<Book> books;
 
+    @Transient
     private Integer size;
 }
