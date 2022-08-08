@@ -35,7 +35,7 @@ public class LibraryController {
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "View the library with an id")
+    @Operation(summary = "View a library with an id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found the library")
     })
@@ -46,7 +46,7 @@ public class LibraryController {
     @PostMapping
     @Operation(summary = "Create a new library")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "New library created")
+            @ApiResponse(responseCode = "200", description = "New library created")
     })
     public LibraryDTO saveLibrary(@RequestBody LibraryDTO libraryDTO) {
         return libraryService.createLibrary(libraryDTO);

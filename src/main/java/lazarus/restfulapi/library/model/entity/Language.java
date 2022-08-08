@@ -1,8 +1,11 @@
 package lazarus.restfulapi.library.model.entity;
 
-import lazarus.restfulapi.library.model.entity.Book;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 @Getter @Setter @Builder @AllArgsConstructor @NoArgsConstructor
@@ -11,12 +14,15 @@ public class Language {
     @Column(name = "language_id")
     private Long id;
 
-    @Column(nullable = false)
+    @NotNull
+    @Column(unique = true)
     private String name;
 
-    @ManyToOne @JoinColumn(name = "book_id")
-    private Book book;
+    @ManyToMany(mappedBy = "language")
+    @JsonIgnore
+    private List<Book> books;
 
-    @ManyToOne @JoinColumn(name = "book_original_id")
-    private Book bookOriginal;
+    @ManyToMany(mappedBy = "languageOriginal")
+    @JsonIgnore
+    private List<Book> booksOriginal;
 }

@@ -16,6 +16,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
+import java.util.List;
 import java.util.Set;
 
 @SpringBootApplication
@@ -91,18 +92,18 @@ public class OnlineLibraryApplication {
 
 	Book book1 = Book.builder()
 			.title("Harry Potter and the Philosopher's Stone")
-			.author(Set.of(author1))
-			.language(Set.of(languageEnglish))
+			.author(List.of(author1))
+			.language(List.of(languageEnglish))
 			.publisher(publisher1)
 			.formatType(FormatType.HARDCOVER)
 			.build();
 
 	Book book2 = Book.builder()
 			.title("Harry Potter and the Philosopher's Stone")
-			.author(Set.of(author1))
-			.language(Set.of(languageEnglish))
+			.author(List.of(author1))
+			.language(List.of(languageEnglish))
 			.publisher(publisher1)
-			.formatType(FormatType.HARDCOVER)
+			.formatType(FormatType.PAPERBACK)
 			.build();
 
 	@Bean

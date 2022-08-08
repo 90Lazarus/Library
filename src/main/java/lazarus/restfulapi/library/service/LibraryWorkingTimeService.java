@@ -4,7 +4,6 @@ import lazarus.restfulapi.library.exception.ErrorInfo;
 import lazarus.restfulapi.library.exception.ResourceNotFoundException;
 import lazarus.restfulapi.library.model.dto.LibraryWorkingTimeDTO;
 import lazarus.restfulapi.library.model.entity.LibraryWorkingTime;
-import lazarus.restfulapi.library.model.mapper.LibraryMapper;
 import lazarus.restfulapi.library.model.mapper.LibraryWorkingTimeMapper;
 import lazarus.restfulapi.library.repository.LibraryRepository;
 import lazarus.restfulapi.library.repository.LibraryWorkingTimeRepository;
@@ -32,7 +31,6 @@ public class LibraryWorkingTimeService {
         else {
             throw new ResourceNotFoundException(ErrorInfo.ResourceType.LIBRARY, libraryId);
         }
-
     }
 
     public List<LibraryWorkingTimeDTO> readLibraryWorkingTime(Long libraryId) throws ResourceNotFoundException {

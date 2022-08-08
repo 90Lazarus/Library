@@ -9,11 +9,12 @@ public class ErrorInfo {
     String message;
 
     public enum ErrorType {
-        RESOURCE_NOT_FOUND
+        RESOURCE_NOT_FOUND, UNIQUE_VIOLATION
     }
 
     public enum ResourceType {
         LIBRARY_WORKING_TIME { @Override public String toString() { return "'Working time'"; } },
-        LIBRARY { @Override public String toString() { return "'Library'"; } }
+        LIBRARY { @Override public String toString() { return "'Library'"; } },
+        LANGUAGE { @Override public String toString() { return "'Language'"; } }
     }
 }

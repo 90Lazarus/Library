@@ -3,7 +3,9 @@ package lazarus.restfulapi.library.model.entity;
 import lazarus.restfulapi.library.model.enums.FormatType;
 import lombok.*;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -13,7 +15,7 @@ public class Book {
     @Column(name = "book_id")
     private Long id;
 
-    @Column(nullable = false)
+    @NotNull
     private String title;
 
     @ManyToMany() @JoinTable(
@@ -22,11 +24,15 @@ public class Book {
             inverseJoinColumns = @JoinColumn(name = "author_id")
     )
     @Column(nullable = false)
-    private Set<Author> author;
+    private List<Author> author;
 
-    @OneToMany(mappedBy = "book")
-    @Column(nullable = false)
-    private Set<Language> language;
+    @ManyToMany() @JoinTable(
+            name = "book_language",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "language_id")
+    )
+    @NotNull
+    private List<Language> language;
 
     @ManyToOne @JoinColumn(name = "publisher_id", nullable = false)
     private Publisher publisher;
@@ -58,8 +64,12 @@ public class Book {
     //original book version info
     private String titleOriginal;
 
-    @OneToMany(mappedBy = "bookOriginal")
-    private Set<Language> languageOriginal;
+    @ManyToMany() @JoinTable(
+            name = "book_language",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "language_id")
+    )
+    private List<Language> languageOriginal;
 
     @ManyToOne @JoinColumn(name = "publisher_original_id")
     private Publisher publisherOriginal;
