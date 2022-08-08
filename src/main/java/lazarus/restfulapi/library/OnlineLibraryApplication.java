@@ -17,13 +17,13 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
 import java.util.List;
-import java.util.Set;
 
 @SpringBootApplication
 public class OnlineLibraryApplication {
 	@Autowired private AuthorRepository authorRepository;
 	@Autowired private BookRepository bookRepository;
 	@Autowired private LanguageRepository languageRepository;
+	@Autowired private GenreRepository genreRepository;
 	@Autowired private LibraryRepository libraryRepository;
 	@Autowired private LibraryWorkingTimeRepository libraryWorkingTimeRepository;
 	@Autowired private PublisherRepository publisherRepository;
@@ -90,12 +90,18 @@ public class OnlineLibraryApplication {
 			.name("English")
 			.build();
 
+	Genre genreFantasy = Genre.builder()
+			.name("Fantasy")
+			.description("Fantasy is a genre of speculative fiction involving magical elements, typically set in a fictional universe and sometimes inspired by mythology and folklore")
+			.build();
+
 	Book book1 = Book.builder()
 			.title("Harry Potter and the Philosopher's Stone")
 			.author(List.of(author1))
 			.language(List.of(languageEnglish))
 			.publisher(publisher1)
 			.formatType(FormatType.HARDCOVER)
+			.genre(List.of(genreFantasy))
 			.build();
 
 	Book book2 = Book.builder()
@@ -104,6 +110,7 @@ public class OnlineLibraryApplication {
 			.language(List.of(languageEnglish))
 			.publisher(publisher1)
 			.formatType(FormatType.PAPERBACK)
+			.genre(List.of(genreFantasy))
 			.build();
 
 	@Bean
@@ -120,6 +127,7 @@ public class OnlineLibraryApplication {
 			publisherRepository.save(publisher1);
 			authorRepository.save(author1);
 			languageRepository.save(languageEnglish);
+			genreRepository.save(genreFantasy);
 			bookRepository.save(book1);
 			bookRepository.save(book2);
 		};

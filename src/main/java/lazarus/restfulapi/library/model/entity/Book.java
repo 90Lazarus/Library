@@ -47,8 +47,12 @@ public class Book {
     @Enumerated(EnumType.STRING) @Column(nullable = false)
     private FormatType formatType;
 
-    @OneToMany(mappedBy = "book")
-    private Set<Genre> genre;
+    @ManyToMany() @JoinTable (
+            name = "book_genre",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id")
+    )
+    private List<Genre> genre;
 
     @Column(length = 8192)
     private String plot;

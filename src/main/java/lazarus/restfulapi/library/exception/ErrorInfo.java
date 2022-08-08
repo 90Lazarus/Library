@@ -15,6 +15,7 @@ public class ErrorInfo {
     public enum ResourceType {
         LIBRARY_WORKING_TIME { @Override public String toString() { return "'Working time'"; } },
         LIBRARY { @Override public String toString() { return "'Library'"; } },
-        LANGUAGE { @Override public String toString() { return "'Language'"; } }
+        LANGUAGE { @Override public String toString() { return "'Language'"; } },
+        GENRE { @Override public String toString() { return "'Genre'"; } }
     }
 }

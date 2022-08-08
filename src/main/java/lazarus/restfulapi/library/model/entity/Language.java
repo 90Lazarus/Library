@@ -14,8 +14,7 @@ public class Language {
     @Column(name = "language_id")
     private Long id;
 
-    @NotNull
-    @Column(unique = true)
+    @NotNull @Column(unique = true)
     private String name;
 
     @ManyToMany(mappedBy = "language")
