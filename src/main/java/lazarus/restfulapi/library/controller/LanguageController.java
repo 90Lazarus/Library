@@ -63,7 +63,7 @@ public class LanguageController {
     }
 
     @DeleteMapping("/languages/{id}")
-    @Operation(summary = "Delete a language with the an id")
+    @Operation(summary = "Delete a language with an id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Language deleted")
     })

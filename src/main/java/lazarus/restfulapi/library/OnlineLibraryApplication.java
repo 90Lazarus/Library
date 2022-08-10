@@ -1,6 +1,6 @@
 package lazarus.restfulapi.library;
 
-import lazarus.restfulapi.library.model.embeddable.Address;
+import lazarus.restfulapi.library.model.embed.Address;
 import lazarus.restfulapi.library.model.entity.*;
 import lazarus.restfulapi.library.model.enums.FormatType;
 import lazarus.restfulapi.library.model.enums.Gender;

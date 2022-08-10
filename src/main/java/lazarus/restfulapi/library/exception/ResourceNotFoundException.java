@@ -2,7 +2,7 @@ package lazarus.restfulapi.library.exception;
 
 public class ResourceNotFoundException extends ResourceException {
     public ResourceNotFoundException(ErrorInfo.ResourceType resourceType) {
-        super(resourceType, "Can not find the '" + resourceType.toString() + "' for the following id");
+        super(resourceType, "The database contains no entries of the following resource: " + resourceType.toString());
     }
 
     public ResourceNotFoundException(ErrorInfo.ResourceType resourceType, Long id) {

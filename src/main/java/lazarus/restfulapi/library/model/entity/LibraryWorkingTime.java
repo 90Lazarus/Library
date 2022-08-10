@@ -1,6 +1,5 @@
 package lazarus.restfulapi.library.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,6 +25,5 @@ public class LibraryWorkingTime {
     private Time closingTime;
 
     @ManyToOne @JoinColumn(name = "library_id")
-    @JsonIgnore
     private Library library;
 }

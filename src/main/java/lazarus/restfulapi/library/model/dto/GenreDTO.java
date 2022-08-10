@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lazarus.restfulapi.library.model.entity.Book;
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
@@ -15,7 +14,7 @@ public class GenreDTO {
     private Long id;
 
     @Schema(description = "Genre name", example = "Fantasy")
-    @NotNull private String name;
+    private String name;
 
     @Schema(description = "Genre description", example = "Fantasy is a genre of speculative fiction involving magical elements, typically set in a fictional universe and sometimes inspired by mythology and folklore")
     private String description;

@@ -1,8 +1,6 @@
 package lazarus.restfulapi.library.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import lazarus.restfulapi.library.model.embeddable.Address;
+import lazarus.restfulapi.library.model.embed.Address;
 import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -12,7 +10,6 @@ import java.util.Set;
 
 @Entity
 @Getter @Setter @Builder @AllArgsConstructor @NoArgsConstructor
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Library {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "library_id")

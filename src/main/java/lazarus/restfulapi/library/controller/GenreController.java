@@ -63,7 +63,7 @@ public class GenreController {
     }
 
     @DeleteMapping("/genres/{id}")
-    @Operation(summary = "Delete a genre with the an id")
+    @Operation(summary = "Delete a genre with an id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Genre deleted")
     })

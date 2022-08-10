@@ -1,6 +1,6 @@
 package lazarus.restfulapi.library.model.entity;
 
-import lazarus.restfulapi.library.model.embeddable.Address;
+import lazarus.restfulapi.library.model.embed.Address;
 import lazarus.restfulapi.library.model.enums.Gender;
 import lombok.*;
 import javax.persistence.*;

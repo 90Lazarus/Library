@@ -1,6 +1,9 @@
 package lazarus.restfulapi.library.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lazarus.restfulapi.library.model.entity.Library;
 import lombok.Data;

@@ -1,10 +1,12 @@
 package lazarus.restfulapi.library.model.entity;
 
-import lazarus.restfulapi.library.model.embeddable.Address;
+import lazarus.restfulapi.library.model.embed.Address;
 import lombok.*;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.Year;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Getter @Setter @Builder @AllArgsConstructor @NoArgsConstructor
@@ -13,7 +15,7 @@ public class Publisher {
     @Column(name = "publisher_id")
     private Long id;
 
-    @Column(nullable = false)
+    @NotNull @Column(unique = true)
     private String name;
 
     private Year yearFounded;
@@ -27,8 +29,13 @@ public class Publisher {
     private String website;
 
     @OneToMany(mappedBy = "publisher")
-    private Set<Book> books;
+    private List<Book> books;
+
+    @PreRemove
+    public void deletePublisher() {
+        this.getBooks().forEach(book -> book.setPublisher(null));
+    }
 
     @OneToMany(mappedBy = "publisherOriginal")
-    private Set<Book> booksOriginal;
+    private List<Book> booksOriginal;
 }

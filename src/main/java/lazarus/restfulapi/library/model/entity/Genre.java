@@ -1,6 +1,5 @@
 package lazarus.restfulapi.library.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,6 +20,5 @@ public class Genre {
     private String description;
 
     @ManyToMany(mappedBy = "genre")
-    @JsonIgnore
     private List<Book> books;
 }

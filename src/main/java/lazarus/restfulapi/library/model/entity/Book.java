@@ -1,16 +1,20 @@
 package lazarus.restfulapi.library.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lazarus.restfulapi.library.model.enums.FormatType;
 import lombok.*;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Getter @Setter @Builder @AllArgsConstructor @NoArgsConstructor
 public class Book {
+    //book edition info
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "book_id")
     private Long id;
@@ -18,23 +22,21 @@ public class Book {
     @NotNull
     private String title;
 
-    @ManyToMany() @JoinTable(
+    @ManyToMany @JoinTable(
             name = "book_author",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id")
     )
-    @Column(nullable = false)
     private List<Author> author;
 
-    @ManyToMany() @JoinTable(
+    @ManyToMany @JoinTable(
             name = "book_language",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "language_id")
     )
-    @NotNull
     private List<Language> language;
 
-    @ManyToOne @JoinColumn(name = "publisher_id", nullable = false)
+    @ManyToOne @JoinColumn(name = "publisher_id")
     private Publisher publisher;
 
     private LocalDate publicationDate;
@@ -44,7 +46,7 @@ public class Book {
 
     private Integer numberOfPages;
 
-    @Enumerated(EnumType.STRING) @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private FormatType formatType;
 
     @ManyToMany() @JoinTable (
@@ -65,7 +67,9 @@ public class Book {
     @OneToOne(mappedBy = "book")
     private Rented rentedTo;
 
-    //original book version info
+    private boolean available;
+
+    //original book edition info
     private String titleOriginal;
 
     @ManyToMany() @JoinTable(

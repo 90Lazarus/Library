@@ -16,6 +16,8 @@ public class ErrorInfo {
         LIBRARY_WORKING_TIME { @Override public String toString() { return "'Working time'"; } },
         LIBRARY { @Override public String toString() { return "'Library'"; } },
         LANGUAGE { @Override public String toString() { return "'Language'"; } },
-        GENRE { @Override public String toString() { return "'Genre'"; } }
+        GENRE { @Override public String toString() { return "'Genre'"; } },
+        PUBLISHER { @Override public String toString() { return "'Publisher'"; } },
+        AUTHOR { @Override public String toString() { return "'Author'"; } }
     }
 }

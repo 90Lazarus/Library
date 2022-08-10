@@ -62,7 +62,7 @@ public class LibraryController {
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Delete a library with the an id")
+    @Operation(summary = "Delete a library with an id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Library deleted")
     })

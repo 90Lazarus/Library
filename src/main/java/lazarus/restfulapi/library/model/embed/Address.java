@@ -1,4 +1,4 @@
-package lazarus.restfulapi.library.model.embeddable;
+package lazarus.restfulapi.library.model.embed;
 
 import lombok.*;
 
