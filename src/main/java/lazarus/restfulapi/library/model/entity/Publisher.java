@@ -1,5 +1,6 @@
 package lazarus.restfulapi.library.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lazarus.restfulapi.library.model.embed.Address;
 import lombok.*;
 
@@ -15,7 +16,8 @@ public class Publisher {
     @Column(name = "publisher_id")
     private Long id;
 
-    @NotNull @Column(unique = true)
+    @NotNull(message = "Publisher name cannot be null")
+    @Column(unique = true)
     private String name;
 
     private Year yearFounded;
@@ -28,6 +30,7 @@ public class Publisher {
 
     private String website;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToMany(mappedBy = "publisher")
     private List<Book> books;
 
@@ -36,6 +39,7 @@ public class Publisher {
         this.getBooks().forEach(book -> book.setPublisher(null));
     }
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToMany(mappedBy = "publisherOriginal")
     private List<Book> booksOriginal;
 }

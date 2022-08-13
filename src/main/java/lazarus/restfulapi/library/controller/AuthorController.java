@@ -1,5 +1,8 @@
 package lazarus.restfulapi.library.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lazarus.restfulapi.library.exception.ResourceNotFoundException;
 import lazarus.restfulapi.library.exception.UniqueViolationException;
 import lazarus.restfulapi.library.model.dto.AuthorDTO;
@@ -20,25 +23,30 @@ public class AuthorController {
     @Autowired private AuthorService authorService;
 
     @GetMapping
-    public List<AuthorDTO> getAllAuthors(@RequestParam(required = false, defaultValue = "0") Integer page,
-                                            @RequestParam(required = false, defaultValue = "10") Integer size,
-                                            @RequestParam(required = false, defaultValue = "ASC") Sort.Direction direction,
-                                            @RequestParam(required = false, defaultValue = "id") String sortBy) throws ResourceNotFoundException {
+    @Operation(summary = "Get the list of all available authors, optionally sorted by parameters")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Found authors in the database"),
+            @ApiResponse(responseCode = "404", description = "No authors found in the database")
+    })
+    public List<AuthorDTO> getAuthors(@RequestParam(required = false, defaultValue = "0") Integer page,
+                                      @RequestParam(required = false, defaultValue = "10") Integer size,
+                                      @RequestParam(required = false, defaultValue = "ASC") Sort.Direction direction,
+                                      @RequestParam(required = false, defaultValue = "id") String sortBy) throws ResourceNotFoundException {
         return authorService.readAuthors(page, size, direction, sortBy);
     }
 
     @GetMapping("/{id}")
-    public AuthorDTO getAuthorById(@PathVariable Long id) throws ResourceNotFoundException {
+    public AuthorDTO getAuthor(@PathVariable Long id) throws ResourceNotFoundException {
         return authorService.readAuthorById(id);
     }
 
     @PostMapping
-    public AuthorDTO saveAuthor(@RequestBody @Valid AuthorDTO authorDTO) throws UniqueViolationException {
+    public AuthorDTO saveAuthor(@RequestBody @Valid AuthorDTO authorDTO) {
         return authorService.createAuthor(authorDTO);
     }
 
     @PutMapping("/{id}")
-    public AuthorDTO updateAuthor(@PathVariable Long id, @RequestBody @Valid AuthorDTO authorDTO) throws UniqueViolationException, ResourceNotFoundException {
+    public AuthorDTO updateAuthor(@PathVariable Long id, @RequestBody @Valid AuthorDTO authorDTO) throws ResourceNotFoundException {
         return authorService.updateAuthorById(id, authorDTO);
     }
 

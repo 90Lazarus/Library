@@ -23,49 +23,47 @@ public class LanguageService {
 
     public LanguageDTO createLanguage(LanguageDTO languageDTO) throws UniqueViolationException {
         Language language = languageMapper.toLanguage(languageDTO);
-        if (languageRepository.existsByIdOrName(language.getId(), language.getName())) {
+        if (!languageRepository.existsByName(language.getName())) {
+            languageRepository.save(language);
+            return languageMapper.toLanguageDTO(language);
+        } else {
             throw new UniqueViolationException(ErrorInfo.ResourceType.LIBRARY, language.getName());
         }
-        else {
-            languageRepository.save(language);
-        }
-        return languageMapper.toLanguageDTO(language);
     }
 
-    public List<LanguageDTO> readLanguages(Integer page, Integer size, Sort.Direction direction, String sortBy) {
-        return languageMapper.toLanguageDTOs(languageRepository.findAll(PageRequest.of(page, size, direction, sortBy)).toList());
+    public List<LanguageDTO> readLanguages(Integer page, Integer size, Sort.Direction direction, String sortBy) throws ResourceNotFoundException {
+        if (!(languageRepository.findAll().isEmpty())) {
+            return languageMapper.toLanguageDTOs(languageRepository.findAll(PageRequest.of(page, size, direction, sortBy)).toList());
+        } else {
+            throw new ResourceNotFoundException(ErrorInfo.ResourceType.LANGUAGE);
+        }
     }
 
     public LanguageDTO readLanguageById(Long id) throws ResourceNotFoundException {
         return languageMapper.toLanguageDTO(languageRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ErrorInfo.ResourceType.LANGUAGE, id)));
     }
 
-    public LanguageDTO updateLanguage(Long id, LanguageDTO languageDTO) throws ResourceNotFoundException, UniqueViolationException {
-        if(languageRepository.findById(id).isPresent()) {
+    public LanguageDTO updateLanguageById(Long id, LanguageDTO languageDTO) throws ResourceNotFoundException, UniqueViolationException {
+        if (languageRepository.findById(id).isPresent()) {
             Language oldLanguage = languageRepository.findById(id).get();
             Language newLanguage = languageMapper.toLanguage(languageDTO);
-            if(languageRepository.existsByIdOrName(newLanguage.getId(), newLanguage.getName())) {
-                throw new UniqueViolationException(ErrorInfo.ResourceType.LANGUAGE, newLanguage.getName());
-            }
-            else {
+            if (!languageRepository.existsByName(newLanguage.getName())) {
                 oldLanguage.setName(newLanguage.getName());
-                oldLanguage.setBooks(newLanguage.getBooks());
-                oldLanguage.setBooksOriginal(newLanguage.getBooksOriginal());
                 languageRepository.save(oldLanguage);
                 return languageMapper.toLanguageDTO(oldLanguage);
+            } else {
+                throw new UniqueViolationException(ErrorInfo.ResourceType.LANGUAGE, newLanguage.getName());
             }
-        }
-        else {
+        } else {
             throw new ResourceNotFoundException(ErrorInfo.ResourceType.LANGUAGE, id);
         }
     }
 
-    public void deleteLanguage(Long id) throws ResourceNotFoundException {
-        if(languageRepository.findById(id).isEmpty()) {
-            throw new ResourceNotFoundException(ErrorInfo.ResourceType.LANGUAGE, id);
-        }
-        else {
+    public void deleteLanguageById(Long id) throws ResourceNotFoundException {
+        if (languageRepository.findById(id).isPresent()) {
             languageRepository.deleteById(id);
+        } else {
+            throw new ResourceNotFoundException(ErrorInfo.ResourceType.LANGUAGE, id);
         }
     }
 }

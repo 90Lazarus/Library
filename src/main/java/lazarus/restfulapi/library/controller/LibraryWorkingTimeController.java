@@ -58,7 +58,7 @@ public class LibraryWorkingTimeController {
             @ApiResponse(responseCode = "404", description = "Can not find the entry in the database that matches the specified ids")
     })
     public LibraryWorkingTimeDTO updateLibraryWorkingTime(@Parameter(description = "id of the library") @PathVariable("libraryId") Long libraryId, @Parameter(description = "id of the working time") @PathVariable("workingTimeId") Long workingTimeId, @Valid @RequestBody LibraryWorkingTimeDTO libraryWorkingTimeDTO) throws ResourceNotFoundException {
-        return libraryWorkingTimeService.updateLibraryWorkingTime(libraryId, workingTimeId, libraryWorkingTimeDTO);
+        return libraryWorkingTimeService.updateLibraryWorkingTimeById(libraryId, workingTimeId, libraryWorkingTimeDTO);
     }
 
     @Operation(summary = "Delete a working time with an id for a library with an id")
@@ -68,6 +68,6 @@ public class LibraryWorkingTimeController {
     })
     @DeleteMapping("/libraries/{libraryId}/working_time/{workingTimeId}")
     public void deleteLibraryWorkingTime(@Parameter(description = "id of the library") @PathVariable("libraryId") Long libraryId, @Parameter(description = "id of the working time") @PathVariable("workingTimeId") Long workingTimeId) throws ResourceNotFoundException {
-        libraryWorkingTimeService.deleteLibraryWorkingTime(libraryId, workingTimeId);
+        libraryWorkingTimeService.deleteLibraryWorkingTimeById(libraryId, workingTimeId);
     }
 }

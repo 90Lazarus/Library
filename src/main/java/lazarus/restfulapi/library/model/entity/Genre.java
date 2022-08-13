@@ -1,5 +1,6 @@
 package lazarus.restfulapi.library.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.persistence.*;
@@ -13,12 +14,14 @@ public class Genre {
     @Column(name = "genre_id")
     private Long id;
 
-    @NotNull @Column(unique = true)
+    @NotNull(message = "Genre name cannot be null")
+    @Column(unique = true)
     private String name;
 
     @Column(length = 2048)
     private String description;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToMany(mappedBy = "genre")
     private List<Book> books;
 }

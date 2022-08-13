@@ -1,11 +1,6 @@
 package lazarus.restfulapi.library.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lazarus.restfulapi.library.model.entity.Library;
 import lombok.Data;
 
 import java.sql.Time;
@@ -26,6 +21,6 @@ public class LibraryWorkingTimeDTO {
     @Schema(description = "The time at which the library closes in 'HH:mm:ss' format", example = "20:00:00")
     private Time closingTime;
 
-    @JsonIgnore
-    private Library library;
+    //@JsonIgnore
+    //private Library library;
 }

@@ -20,13 +20,9 @@ public class AuthorService {
     @Autowired private AuthorRepository authorRepository;
     @Autowired private AuthorMapper authorMapper;
 
-    public AuthorDTO createAuthor(AuthorDTO authorDTO) throws UniqueViolationException {
+    public AuthorDTO createAuthor(AuthorDTO authorDTO) {
         Author author = authorMapper.toAuthor(authorDTO);
-        //if (authorRepository.findById(author.getId()).isEmpty()) {
-            authorRepository.save(author);
-        //} else {
-        //    throw new UniqueViolationException(ErrorInfo.ResourceType.AUTHOR, author.getFullName());
-        //}
+        authorRepository.save(author);
         return authorMapper.toAuthorDTO(author);
     }
 
@@ -42,29 +38,23 @@ public class AuthorService {
         return authorMapper.toAuthorDTO(authorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ErrorInfo.ResourceType.AUTHOR, id)));
     }
 
-    public AuthorDTO updateAuthorById(Long id, AuthorDTO newAuthorDTO) throws ResourceNotFoundException, UniqueViolationException {
+    public AuthorDTO updateAuthorById(Long id, AuthorDTO newAuthorDTO) throws ResourceNotFoundException {
         if (authorRepository.findById(id).isPresent()) {
             Author oldAuthor = authorRepository.findById(id).get();
             Author newAuthor = authorMapper.toAuthor(newAuthorDTO);
-            if (authorRepository.existsById(newAuthor.getId())) {
-                oldAuthor.setId(newAuthor.getId());
-                oldAuthor.setFullName(newAuthor.getFullName());
-                oldAuthor.setPenName(newAuthor.getPenName());
-                oldAuthor.setDateOfBirth(newAuthor.getDateOfBirth());
-                oldAuthor.setDateOfDeath(newAuthor.getDateOfDeath());
-                oldAuthor.setNationality(newAuthor.getNationality());
-                oldAuthor.setGender(newAuthor.getGender());
-                oldAuthor.setOccupation(newAuthor.getOccupation());
-                oldAuthor.setShortBio(newAuthor.getShortBio());
-                oldAuthor.setPhoto(newAuthor.getPhoto());
-                oldAuthor.setWikipediaPageAddress(newAuthor.getWikipediaPageAddress());
-                oldAuthor.setGoodreadsPageAddress(newAuthor.getGoodreadsPageAddress());
-                oldAuthor.setAuthorWebsiteAddress(newAuthor.getAuthorWebsiteAddress());
-                oldAuthor.setBooks(newAuthor.getBooks());
-                return authorMapper.toAuthorDTO(oldAuthor);
-            } else {
-                throw new UniqueViolationException(ErrorInfo.ResourceType.AUTHOR, id);
-            }
+            oldAuthor.setFullName(newAuthor.getFullName());
+            oldAuthor.setPenName(newAuthor.getPenName());
+            oldAuthor.setDateOfBirth(newAuthor.getDateOfBirth());
+            oldAuthor.setDateOfDeath(newAuthor.getDateOfDeath());
+            oldAuthor.setNationality(newAuthor.getNationality());
+            oldAuthor.setGender(newAuthor.getGender());
+            oldAuthor.setOccupation(newAuthor.getOccupation());
+            oldAuthor.setShortBio(newAuthor.getShortBio());
+            oldAuthor.setPhoto(newAuthor.getPhoto());
+            oldAuthor.setWikipediaPageAddress(newAuthor.getWikipediaPageAddress());
+            oldAuthor.setGoodreadsPageAddress(newAuthor.getGoodreadsPageAddress());
+            oldAuthor.setAuthorWebsiteAddress(newAuthor.getAuthorWebsiteAddress());
+            return authorMapper.toAuthorDTO(oldAuthor);
         } else {
             throw new ResourceNotFoundException(ErrorInfo.ResourceType.AUTHOR, id);
         }

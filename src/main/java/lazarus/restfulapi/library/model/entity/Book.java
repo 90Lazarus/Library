@@ -1,8 +1,6 @@
 package lazarus.restfulapi.library.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import lazarus.restfulapi.library.model.enums.FormatType;
 import lombok.*;
 
@@ -14,28 +12,27 @@ import java.util.List;
 @Entity
 @Getter @Setter @Builder @AllArgsConstructor @NoArgsConstructor
 public class Book {
-    //book edition info
+    //information about this particular version of the book
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "book_id")
     private Long id;
 
-    @NotNull
+    @NotNull(message = "Book title cannot be empty")
     private String title;
 
-    @ManyToMany @JoinTable(
-            name = "book_author",
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @ManyToMany @JoinTable(name = "book_author",
             joinColumns = @JoinColumn(name = "book_id"),
-            inverseJoinColumns = @JoinColumn(name = "author_id")
-    )
+            inverseJoinColumns = @JoinColumn(name = "author_id"))
     private List<Author> author;
 
-    @ManyToMany @JoinTable(
-            name = "book_language",
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @ManyToMany @JoinTable(name = "book_language",
             joinColumns = @JoinColumn(name = "book_id"),
-            inverseJoinColumns = @JoinColumn(name = "language_id")
-    )
+            inverseJoinColumns = @JoinColumn(name = "language_id"))
     private List<Language> language;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToOne @JoinColumn(name = "publisher_id")
     private Publisher publisher;
 
@@ -49,11 +46,10 @@ public class Book {
     @Enumerated(EnumType.STRING)
     private FormatType formatType;
 
-    @ManyToMany() @JoinTable (
-            name = "book_genre",
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @ManyToMany() @JoinTable (name = "book_genre",
             joinColumns = @JoinColumn(name = "book_id"),
-            inverseJoinColumns = @JoinColumn(name = "genre_id")
-    )
+            inverseJoinColumns = @JoinColumn(name = "genre_id"))
     private List<Genre> genre;
 
     @Column(length = 8192)
@@ -61,24 +57,27 @@ public class Book {
 
     private Integer isbn;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToOne @JoinColumn(name = "library_id")
     private Library library;
 
+    @Transient
+    private boolean rented = false;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToOne(mappedBy = "book")
     private Rented rentedTo;
 
-    private boolean available;
-
-    //original book edition info
+    //information of the original version of the book
     private String titleOriginal;
 
-    @ManyToMany() @JoinTable(
-            name = "book_language",
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @ManyToMany() @JoinTable(name = "book_language",
             joinColumns = @JoinColumn(name = "book_id"),
-            inverseJoinColumns = @JoinColumn(name = "language_id")
-    )
+            inverseJoinColumns = @JoinColumn(name = "language_id"))
     private List<Language> languageOriginal;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToOne @JoinColumn(name = "publisher_original_id")
     private Publisher publisherOriginal;
 

@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lazarus.restfulapi.library.exception.ResourceNotFoundException;
 import lazarus.restfulapi.library.exception.UniqueViolationException;
+import lazarus.restfulapi.library.model.dto.BookDTO;
 import lazarus.restfulapi.library.model.dto.PublisherDTO;
 import lazarus.restfulapi.library.service.PublisherService;
 import lombok.RequiredArgsConstructor;
@@ -18,33 +19,43 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/publishers", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PublisherController {
     @Autowired private PublisherService publisherService;
 
-    @GetMapping("/publishers")
+    @GetMapping
     @Operation(summary = "Get the list of all available publishers, optionally sorted by parameters")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found publishers in the database"),
             @ApiResponse(responseCode = "404", description = "No publishers found in the database")
     })
-    public List<PublisherDTO> getAllPublishers(@RequestParam(required = false, defaultValue = "0") Integer page,
-                                           @RequestParam(required = false, defaultValue = "10") Integer size,
-                                           @RequestParam(required = false, defaultValue = "ASC") Sort.Direction direction,
-                                           @RequestParam(required = false, defaultValue = "id") String sortBy) {
+    public List<PublisherDTO> getPublishers(@RequestParam(required = false, defaultValue = "0") Integer page,
+                                            @RequestParam(required = false, defaultValue = "10") Integer size,
+                                            @RequestParam(required = false, defaultValue = "ASC") Sort.Direction direction,
+                                            @RequestParam(required = false, defaultValue = "id") String sortBy) throws ResourceNotFoundException {
         return publisherService.readPublishers(page, size, direction, sortBy);
     }
 
-    @GetMapping("/publishers/{id}")
+    @GetMapping("/{id}")
     @Operation(summary = "View a publisher with an id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found the publisher")
     })
-    public PublisherDTO getPublisherById(@PathVariable Long id) throws ResourceNotFoundException {
+    public PublisherDTO getPublisher(@PathVariable Long id) throws ResourceNotFoundException {
         return publisherService.readPublisherById(id);
     }
 
-    @PostMapping("/publishers")
+    @GetMapping("/{id}/books")
+    @Operation(summary = "Get the list of all books by a publisher with an id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Found all books for the publisher with an id"),
+            @ApiResponse(responseCode = "404", description = "Publisher with the id has no books in the database")
+    })
+    public List<BookDTO> getPublisherBooks(@PathVariable Long id) throws ResourceNotFoundException {
+        return publisherService.readPublisherBooks(id);
+    }
+
+    @PostMapping
     @Operation(summary = "Create a new unique publisher")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "New publisher created")
@@ -53,21 +64,21 @@ public class PublisherController {
         return publisherService.createPublisher(publisherDTO);
     }
 
-    @PutMapping("/publishers/{id}")
+    @PutMapping("/{id}")
     @Operation(summary = "Modify a publisher with an id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Publisher updated")
     })
     public PublisherDTO updatePublisher(@PathVariable Long id, @RequestBody @Valid PublisherDTO publisherDTO) throws ResourceNotFoundException, UniqueViolationException {
-        return publisherService.updatePublisher(id, publisherDTO);
+        return publisherService.updatePublisherById(id, publisherDTO);
     }
 
-    @DeleteMapping("/publishers/{id}")
+    @DeleteMapping("/{id}")
     @Operation(summary = "Delete a publisher with an id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Publisher deleted")
     })
     public void deletePublisher(@PathVariable Long id) throws ResourceNotFoundException {
-        publisherService.deletePublisher(id);
+        publisherService.deletePublisherById(id);
     }
 }

@@ -33,43 +33,43 @@ public class OnlineLibraryApplication {
 		SpringApplication.run(OnlineLibraryApplication.class, args);
 	}
 
-	Library libraryBG = Library.builder()
-			.name("Belgrade library")
+	Library libraryMedijana = Library.builder()
+			.name("Biblioteka Medijana")
 			.yearEstablished(Year.of(1895))
-			.address(new Address("Serbia", "", "Belgrade", "White Street", 26))
+			.address(new Address("Serbia", "", "Nis", "Medijana Street", 26))
 			.build();
 
-	Library libraryNS = Library.builder()
-			.name("Novi Sad library")
+	Library libraryPantelej = Library.builder()
+			.name("Biblioteka Pantelej")
 			.yearEstablished(Year.of(1923))
-			.address(new Address("Serbia", "", "Novi Sad", "New Street", 86))
+			.address(new Address("Serbia", "", "Nis", "Pantelej Street", 86))
 			.build();
 
-	Library libraryNI = Library.builder()
-			.name("Nis library")
+	Library libraryPalilula = Library.builder()
+			.name("Biblioteka Palilula")
 			.yearEstablished(Year.of(1932))
-			.address(new Address("Serbia", "", "Nis", "Nisa", 17))
+			.address(new Address("Serbia", "", "Nis", "Palilula Street", 17))
 			.build();
 
 	LibraryWorkingTime LWHMonday = LibraryWorkingTime.builder()
 			.dayOfWeek(DayOfWeek.MONDAY)
 			.openingTime(Time.valueOf("08:00:00"))
 			.closingTime(Time.valueOf("20:00:00"))
-			.library(libraryBG)
+			.library(libraryMedijana)
 			.build();
 
 	LibraryWorkingTime LWHTuesday = LibraryWorkingTime.builder()
 			.dayOfWeek(DayOfWeek.TUESDAY)
 			.openingTime(Time.valueOf("08:00:00"))
 			.closingTime(Time.valueOf("20:00:00"))
-			.library(libraryBG)
+			.library(libraryMedijana)
 			.build();
 
 	LibraryWorkingTime LWHWednesday = LibraryWorkingTime.builder()
 			.dayOfWeek(DayOfWeek.WEDNESDAY)
 			.openingTime(Time.valueOf("08:00:00"))
 			.closingTime(Time.valueOf("20:00:00"))
-			.library(libraryBG)
+			.library(libraryMedijana)
 			.build();
 
 	Publisher publisher1 = Publisher.builder()
@@ -102,6 +102,7 @@ public class OnlineLibraryApplication {
 			.publisher(publisher1)
 			.formatType(FormatType.HARDCOVER)
 			.genre(List.of(genreFantasy))
+			.library(libraryMedijana)
 			.build();
 
 	Book book2 = Book.builder()
@@ -111,14 +112,15 @@ public class OnlineLibraryApplication {
 			.publisher(publisher1)
 			.formatType(FormatType.PAPERBACK)
 			.genre(List.of(genreFantasy))
+			.library(libraryMedijana)
 			.build();
 
 	@Bean
 	InitializingBean sendDatabase() {
 		return () -> {
-			libraryRepository.save(libraryBG);
-			libraryRepository.save(libraryNS);
-			libraryRepository.save(libraryNI);
+			libraryRepository.save(libraryMedijana);
+			libraryRepository.save(libraryPantelej);
+			libraryRepository.save(libraryPalilula);
 
 			libraryWorkingTimeRepository.save(LWHMonday);
 			libraryWorkingTimeRepository.save(LWHTuesday);

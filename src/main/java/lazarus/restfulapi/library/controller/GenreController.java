@@ -18,33 +18,33 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/genres", produces = MediaType.APPLICATION_JSON_VALUE)
 public class GenreController {
     @Autowired private GenreService genreService;
 
-    @GetMapping("/genres")
+    @GetMapping
     @Operation(summary = "Get the list of all available genres, optionally sorted by parameters")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found genres in the database"),
             @ApiResponse(responseCode = "404", description = "No genres found in the database")
     })
-    public List<GenreDTO> getAllGenres(@RequestParam(required = false, defaultValue = "0") Integer page,
-                                       @RequestParam(required = false, defaultValue = "10") Integer size,
-                                       @RequestParam(required = false, defaultValue = "ASC") Sort.Direction direction,
-                                       @RequestParam(required = false, defaultValue = "id") String sortBy) {
+    public List<GenreDTO> getGenres(@RequestParam(required = false, defaultValue = "0") Integer page,
+                                    @RequestParam(required = false, defaultValue = "10") Integer size,
+                                    @RequestParam(required = false, defaultValue = "ASC") Sort.Direction direction,
+                                    @RequestParam(required = false, defaultValue = "id") String sortBy) throws ResourceNotFoundException {
         return genreService.readGenres(page, size, direction, sortBy);
     }
 
-    @GetMapping("/genres/{id}")
+    @GetMapping("/{id}")
     @Operation(summary = "View a genre with an id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found the genre")
     })
-    public GenreDTO getGenreById(@PathVariable Long id) throws ResourceNotFoundException {
+    public GenreDTO getGenre(@PathVariable Long id) throws ResourceNotFoundException {
         return genreService.readGenreById(id);
     }
 
-    @PostMapping("/genres")
+    @PostMapping
     @Operation(summary = "Create a new unique genre")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "New genre created")
@@ -53,21 +53,21 @@ public class GenreController {
         return genreService.createGenre(genreDTO);
     }
 
-    @PutMapping("/genres/{id}")
+    @PutMapping("/{id}")
     @Operation(summary = "Modify a genre with an id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Genre updated")
     })
     public GenreDTO updateGenre(@PathVariable Long id, @RequestBody @Valid GenreDTO genreDTO) throws ResourceNotFoundException, UniqueViolationException {
-        return genreService.updateGenre(id, genreDTO);
+        return genreService.updateGenreById(id, genreDTO);
     }
 
-    @DeleteMapping("/genres/{id}")
+    @DeleteMapping("{id}")
     @Operation(summary = "Delete a genre with an id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Genre deleted")
     })
     public void deleteGenre(@PathVariable Long id) throws ResourceNotFoundException {
-        genreService.deleteGenre(id);
+        genreService.deleteGenreById(id);
     }
 }

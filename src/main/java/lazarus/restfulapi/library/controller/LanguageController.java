@@ -18,33 +18,33 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/languages", produces = MediaType.APPLICATION_JSON_VALUE)
 public class LanguageController {
     @Autowired private LanguageService languageService;
 
-    @GetMapping("/languages")
+    @GetMapping
     @Operation(summary = "Get the list of all available languages, optionally sorted by parameters")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found languages in the database"),
             @ApiResponse(responseCode = "404", description = "No languages found in the database")
     })
-    public List<LanguageDTO> getAllLanguages(@RequestParam(required = false, defaultValue = "0") Integer page,
-                                             @RequestParam(required = false, defaultValue = "10") Integer size,
-                                             @RequestParam(required = false, defaultValue = "ASC") Sort.Direction direction,
-                                             @RequestParam(required = false, defaultValue = "id") String sortBy) {
+    public List<LanguageDTO> getLanguages(@RequestParam(required = false, defaultValue = "0") Integer page,
+                                          @RequestParam(required = false, defaultValue = "10") Integer size,
+                                          @RequestParam(required = false, defaultValue = "ASC") Sort.Direction direction,
+                                          @RequestParam(required = false, defaultValue = "id") String sortBy) throws ResourceNotFoundException {
         return languageService.readLanguages(page, size, direction, sortBy);
     }
 
-    @GetMapping("/languages/{id}")
+    @GetMapping("/{id}")
     @Operation(summary = "View a language with an id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found the language")
     })
-    public LanguageDTO getLanguageById(@PathVariable("id") Long id) throws ResourceNotFoundException {
+    public LanguageDTO getLanguage(@PathVariable Long id) throws ResourceNotFoundException {
         return languageService.readLanguageById(id);
     }
 
-    @PostMapping("/languages")
+    @PostMapping
     @Operation(summary = "Create a new unique language")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "New language created")
@@ -53,21 +53,21 @@ public class LanguageController {
         return languageService.createLanguage(languageDTO);
     }
 
-    @PutMapping("/languages/{id}")
+    @PutMapping("/{id}")
     @Operation(summary = "Modify a language with an id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Language updated")
     })
-    public LanguageDTO updateLanguage(@PathVariable("id") Long id, @RequestBody @Valid LanguageDTO languageDTO) throws ResourceNotFoundException, UniqueViolationException {
-        return languageService.updateLanguage(id, languageDTO);
+    public LanguageDTO updateLanguage(@PathVariable Long id, @RequestBody @Valid LanguageDTO languageDTO) throws ResourceNotFoundException, UniqueViolationException {
+        return languageService.updateLanguageById(id, languageDTO);
     }
 
-    @DeleteMapping("/languages/{id}")
+    @DeleteMapping("/{id}")
     @Operation(summary = "Delete a language with an id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Language deleted")
     })
-    public void deleteLanguage(@PathVariable("id") Long id) throws ResourceNotFoundException {
-        languageService.deleteLanguage(id);
+    public void deleteLanguage(@PathVariable Long id) throws ResourceNotFoundException {
+        languageService.deleteLanguageById(id);
     }
 }

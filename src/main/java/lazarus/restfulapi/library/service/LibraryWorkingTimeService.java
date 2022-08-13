@@ -27,39 +27,39 @@ public class LibraryWorkingTimeService {
                 libraryWorkingTime.setLibrary(libraryRepository.findById(libraryId).get());
                 libraryWorkingTimeRepository.save(libraryWorkingTime);
                 return libraryWorkingTimeMapper.toLibraryWorkingTimeDTOs(libraryRepository.findById(libraryId).get().getWorkingTime());
-        }
-        else {
+        } else {
             throw new ResourceNotFoundException(ErrorInfo.ResourceType.LIBRARY, libraryId);
         }
     }
 
     public List<LibraryWorkingTimeDTO> readLibraryWorkingTime(Long libraryId) throws ResourceNotFoundException {
-        if(libraryRepository.findById(libraryId).isPresent()) {
-            return libraryWorkingTimeMapper.toLibraryWorkingTimeDTOs(libraryRepository.findById(libraryId).get().getWorkingTime());
-        }
-        else {
+        if (libraryRepository.findById(libraryId).isPresent()) {
+            if (!(libraryRepository.findById(libraryId).get().getWorkingTime().isEmpty())) {
+                return libraryWorkingTimeMapper.toLibraryWorkingTimeDTOs(libraryRepository.findById(libraryId).get().getWorkingTime());
+            } else {
+                throw new ResourceNotFoundException(ErrorInfo.ResourceType.LIBRARY_WORKING_TIME);
+            }
+        } else {
             throw new ResourceNotFoundException(ErrorInfo.ResourceType.LIBRARY, libraryId);
         }
     }
 
     public LibraryWorkingTimeDTO readLibraryWorkingTimeById(Long libraryId, Long libraryWorkingTimeId) throws ResourceNotFoundException {
-        if(libraryRepository.findById(libraryId).isPresent()) {
+        if (libraryRepository.findById(libraryId).isPresent()) {
             if(libraryWorkingTimeRepository.existsByIdAndLibrary_Id(libraryWorkingTimeId, libraryId)) {
                 return libraryWorkingTimeMapper.toLibraryWorkingTimeDTO(libraryWorkingTimeRepository.findByIdAndLibrary_Id(libraryWorkingTimeId, libraryId));
-            }
-            else {
+            } else {
                 throw new ResourceNotFoundException(ErrorInfo.ResourceType.LIBRARY, libraryId, ErrorInfo.ResourceType.LIBRARY_WORKING_TIME, libraryWorkingTimeId);
             }
-        }
-            else {
-                throw new ResourceNotFoundException(ErrorInfo.ResourceType.LIBRARY, libraryId);
+        } else {
+            throw new ResourceNotFoundException(ErrorInfo.ResourceType.LIBRARY, libraryId);
         }
     }
 
-    public LibraryWorkingTimeDTO updateLibraryWorkingTime(Long libraryId, Long libraryWorkingTimeId, LibraryWorkingTimeDTO libraryWorkingTimeDTO) throws ResourceNotFoundException {
+    public LibraryWorkingTimeDTO updateLibraryWorkingTimeById(Long libraryId, Long libraryWorkingTimeId, LibraryWorkingTimeDTO libraryWorkingTimeDTO) throws ResourceNotFoundException {
         if (libraryRepository.findById(libraryId).isPresent()) {
             if (libraryWorkingTimeRepository.findById(libraryWorkingTimeId).isPresent()) {
-                if(libraryWorkingTimeRepository.existsByIdAndLibrary_Id(libraryWorkingTimeId, libraryId)) {
+                if (libraryWorkingTimeRepository.existsByIdAndLibrary_Id(libraryWorkingTimeId, libraryId)) {
                     LibraryWorkingTime newLibraryWorkingTime = libraryWorkingTimeMapper.toLibraryWorkingTime(libraryWorkingTimeDTO);
                     LibraryWorkingTime oldLibraryWorkingTime = libraryWorkingTimeRepository.findById(libraryWorkingTimeId).get();
                     oldLibraryWorkingTime.setDayOfWeek(newLibraryWorkingTime.getDayOfWeek());
@@ -67,35 +67,29 @@ public class LibraryWorkingTimeService {
                     oldLibraryWorkingTime.setClosingTime(newLibraryWorkingTime.getClosingTime());
                     libraryWorkingTimeRepository.save(oldLibraryWorkingTime);
                     return libraryWorkingTimeMapper.toLibraryWorkingTimeDTO(oldLibraryWorkingTime);
-                }
-                else {
+                } else {
                     throw new ResourceNotFoundException(ErrorInfo.ResourceType.LIBRARY, libraryId, ErrorInfo.ResourceType.LIBRARY_WORKING_TIME, libraryWorkingTimeId);
                 }
-            }
-            else {
+            } else {
                 throw new ResourceNotFoundException(ErrorInfo.ResourceType.LIBRARY_WORKING_TIME, libraryWorkingTimeId);
             }
-        }
-        else {
+        } else {
             throw new ResourceNotFoundException(ErrorInfo.ResourceType.LIBRARY, libraryId);
         }
     }
 
-    public void deleteLibraryWorkingTime(Long libraryId, Long libraryWorkingTimeId) throws ResourceNotFoundException {
+    public void deleteLibraryWorkingTimeById(Long libraryId, Long libraryWorkingTimeId) throws ResourceNotFoundException {
         if (libraryRepository.findById(libraryId).isPresent()) {
             if (libraryWorkingTimeRepository.findById(libraryWorkingTimeId).isPresent()) {
-                if(libraryWorkingTimeRepository.existsByIdAndLibrary_Id(libraryWorkingTimeId, libraryId)) {
+                if (libraryWorkingTimeRepository.existsByIdAndLibrary_Id(libraryWorkingTimeId, libraryId)) {
                     libraryWorkingTimeRepository.deleteById(libraryWorkingTimeId);
-                }
-                else {
+                } else {
                     throw new ResourceNotFoundException(ErrorInfo.ResourceType.LIBRARY, libraryId, ErrorInfo.ResourceType.LIBRARY_WORKING_TIME, libraryWorkingTimeId);
                 }
-            }
-            else {
+            } else {
                 throw new ResourceNotFoundException(ErrorInfo.ResourceType.LIBRARY_WORKING_TIME, libraryWorkingTimeId);
             }
-        }
-        else {
+        } else {
             throw new ResourceNotFoundException(ErrorInfo.ResourceType.LIBRARY, libraryId);
         }
     }

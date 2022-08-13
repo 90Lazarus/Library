@@ -1,5 +1,6 @@
 package lazarus.restfulapi.library.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.persistence.*;
@@ -15,15 +16,16 @@ public class LibraryWorkingTime {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @NotNull
+    @NotNull(message = "Day of Week cannot be null")
     private DayOfWeek dayOfWeek;
 
-    @NotNull
+    @NotNull(message = "Opening Time cannot be null")
     private Time openingTime;
 
-    @NotNull
+    @NotNull(message = "Closing Time cannot be null")
     private Time closingTime;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToOne @JoinColumn(name = "library_id")
     private Library library;
 }

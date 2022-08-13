@@ -1,5 +1,6 @@
 package lazarus.restfulapi.library.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lazarus.restfulapi.library.model.enums.Gender;
 import lombok.*;
 
@@ -15,7 +16,7 @@ public class Author {
     @Column(name = "author_id")
     private Long id;
 
-    @NotNull
+    @NotNull(message = "Full name of the author cannot be null")
     private String fullName;
 
     private String penName;
@@ -41,6 +42,7 @@ public class Author {
     private String goodreadsPageAddress;
     private String authorWebsiteAddress;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToMany(mappedBy = "author", cascade = CascadeType.ALL)
     private List<Book> books;
 }
