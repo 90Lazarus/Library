@@ -4,6 +4,7 @@ import lazarus.restfulapi.library.model.embed.Address;
 import lazarus.restfulapi.library.model.enums.Gender;
 import lombok.*;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -13,16 +14,16 @@ public class User {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @NotNull @Column(unique = true)
     private String email;
 
-    @Column(nullable = false)
+    @NotNull
     private String password;
 
-    @Column(nullable = false)
+    @NotNull
     private String firstName;
 
-    @Column(nullable = false)
+    @NotNull
     private String lastName;
 
     @Transient
@@ -39,7 +40,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @Column(nullable = false)
+    @NotNull
     @Builder.Default
     private boolean isAdmin = false;
 

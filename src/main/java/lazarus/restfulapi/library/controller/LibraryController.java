@@ -52,6 +52,8 @@ public class LibraryController {
     }
 
     @GetMapping("/{libraryId}/books/{bookId}")
+    @Operation(summary = "View a book with an id for a library with an id")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found the book for the library with the id")})
     public BookDTO getLibraryBookById(@PathVariable Long libraryId, @PathVariable Long bookId) throws ResourceNotFoundException {
         return libraryService.readLibraryBookById(libraryId, bookId);
     }

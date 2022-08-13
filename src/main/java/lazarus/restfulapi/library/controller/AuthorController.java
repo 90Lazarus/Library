@@ -24,10 +24,7 @@ public class AuthorController {
 
     @GetMapping
     @Operation(summary = "Get the list of all available authors, optionally sorted by parameters")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Found authors in the database"),
-            @ApiResponse(responseCode = "404", description = "No authors found in the database")
-    })
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found authors in the database")})
     public List<AuthorDTO> getAuthors(@RequestParam(required = false, defaultValue = "0") Integer page,
                                       @RequestParam(required = false, defaultValue = "10") Integer size,
                                       @RequestParam(required = false, defaultValue = "ASC") Sort.Direction direction,
@@ -36,21 +33,29 @@ public class AuthorController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "View an author with an id")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found the author")})
     public AuthorDTO getAuthor(@PathVariable Long id) throws ResourceNotFoundException {
         return authorService.readAuthorById(id);
     }
 
     @PostMapping
+    @Operation(summary = "Create a new author")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "New author created")})
     public AuthorDTO saveAuthor(@RequestBody @Valid AuthorDTO authorDTO) {
         return authorService.createAuthor(authorDTO);
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Modify an author with an id")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Author updated")})
     public AuthorDTO updateAuthor(@PathVariable Long id, @RequestBody @Valid AuthorDTO authorDTO) throws ResourceNotFoundException {
         return authorService.updateAuthorById(id, authorDTO);
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete an author with an id")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Author deleted")})
     public void deleteAuthor(@PathVariable Long id) throws ResourceNotFoundException {
         authorService.deleteAuthorById(id);
     }
