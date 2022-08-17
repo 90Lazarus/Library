@@ -52,6 +52,8 @@ public class BookDTO {
 
     @Schema(description = "The person the book is currently rented to", example = "Peter Parker")
     private Rented rentedTo;
+
+    private boolean adult;
     //private boolean rented;
 
     @Schema(description = "Original title of the book", example = "Charlotte’s Web")

@@ -4,12 +4,17 @@ import lazarus.restfulapi.library.model.embed.Address;
 import lazarus.restfulapi.library.model.entity.*;
 import lazarus.restfulapi.library.model.enums.FormatType;
 import lazarus.restfulapi.library.model.enums.Gender;
+import lazarus.restfulapi.library.model.enums.Role;
 import lazarus.restfulapi.library.repository.*;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.sql.Time;
 import java.time.DayOfWeek;
@@ -18,7 +23,7 @@ import java.time.Month;
 import java.time.Year;
 import java.util.List;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 public class OnlineLibraryApplication {
 	@Autowired private AuthorRepository authorRepository;
 	@Autowired private BookRepository bookRepository;
@@ -28,6 +33,8 @@ public class OnlineLibraryApplication {
 	@Autowired private LibraryWorkingTimeRepository libraryWorkingTimeRepository;
 	@Autowired private PublisherRepository publisherRepository;
 	@Autowired private UserRepository userRepository;
+
+	PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 	public static void main(String[] args) {
 		SpringApplication.run(OnlineLibraryApplication.class, args);
@@ -115,6 +122,16 @@ public class OnlineLibraryApplication {
 			.library(libraryMedijana)
 			.build();
 
+	User user = User.builder()
+			.email("slobodanmitrovic90@gmail.com")
+			.password(passwordEncoder.encode("password"))
+			.firstName("Slobodan")
+			.lastName("Mitrovic")
+			.dateOfBirth(LocalDate.of(1990, Month.JUNE, 1))
+			.gender(Gender.MALE)
+			.role(Role.ADMIN)
+			.build();
+
 	@Bean
 	InitializingBean sendDatabase() {
 		return () -> {
@@ -132,6 +149,7 @@ public class OnlineLibraryApplication {
 			genreRepository.save(genreFantasy);
 			bookRepository.save(book1);
 			bookRepository.save(book2);
+			userRepository.save(user);
 		};
 	}
 }

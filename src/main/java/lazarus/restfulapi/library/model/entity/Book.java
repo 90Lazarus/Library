@@ -68,6 +68,8 @@ public class Book {
     @OneToOne(mappedBy = "book")
     private Rented rentedTo;
 
+    private boolean adult;
+
     //information of the original version of the book
     private String titleOriginal;
 

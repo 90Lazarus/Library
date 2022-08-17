@@ -2,6 +2,7 @@ package lazarus.restfulapi.library.model.entity;
 
 import lombok.*;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -11,7 +12,7 @@ public class Rented {
     @Column(name = "rented_id")
     private Long id;
 
-    @Column(nullable = false)
+    @NotNull
     private Date dateRented;
 
     private Date dateReturned;

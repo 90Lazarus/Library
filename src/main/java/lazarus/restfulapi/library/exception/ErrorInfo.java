@@ -19,6 +19,8 @@ public class ErrorInfo {
         GENRE { @Override public String toString() { return "'Genre'"; } },
         PUBLISHER { @Override public String toString() { return "'Publisher'"; } },
         AUTHOR { @Override public String toString() { return "'Author'"; } },
-        BOOK { @Override public String toString() { return "'Book'"; } }
+        BOOK { @Override public String toString() { return "'Book'"; } },
+        USER { @Override public String toString() { return "'User'"; } },
+        EMAIL { @Override public String toString() { return "'Email'"; } }
     }
 }
