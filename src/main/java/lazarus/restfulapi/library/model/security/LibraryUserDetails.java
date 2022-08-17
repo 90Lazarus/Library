@@ -1,4 +1,4 @@
-package lazarus.restfulapi.library.model;
+package lazarus.restfulapi.library.model.security;
 
 import lazarus.restfulapi.library.model.entity.User;
 import lombok.Data;

@@ -1,6 +1,6 @@
 package lazarus.restfulapi.library.service;
 
-import lazarus.restfulapi.library.model.LibraryUserDetails;
+import lazarus.restfulapi.library.model.security.LibraryUserDetails;
 import lazarus.restfulapi.library.model.entity.User;
 import lazarus.restfulapi.library.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -9,8 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
