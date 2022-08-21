@@ -9,7 +9,7 @@ public class ErrorInfo {
     String message;
 
     public enum ErrorType {
-        RESOURCE_NOT_FOUND, UNIQUE_VIOLATION
+        RESOURCE_NOT_FOUND, UNIQUE_VIOLATION, PASSWORDS_DONT_MATCH, INVALID_ROLE
     }
 
     public enum ResourceType {
@@ -21,6 +21,10 @@ public class ErrorInfo {
         AUTHOR { @Override public String toString() { return "'Author'"; } },
         BOOK { @Override public String toString() { return "'Book'"; } },
         USER { @Override public String toString() { return "'User'"; } },
-        EMAIL { @Override public String toString() { return "'Email'"; } }
+        EMAIL { @Override public String toString() { return "'Email'"; } },
+        PASSWORDS { @Override public String toString() { return "'Passwords'"; } },
+        RENTING_INFO { @Override public String toString() { return "'Renting info'"; } },
+        RENTING_HISTORY { @Override public String toString() { return "'Renting history'"; } },
+        ROLE { @Override public String toString() { return "'Role'"; } }
     }
 }

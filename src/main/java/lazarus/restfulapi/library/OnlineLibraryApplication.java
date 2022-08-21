@@ -1,5 +1,7 @@
 package lazarus.restfulapi.library;
 
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
 import lazarus.restfulapi.library.model.embed.Address;
 import lazarus.restfulapi.library.model.entity.*;
 import lazarus.restfulapi.library.model.enums.FormatType;
@@ -17,10 +19,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.sql.Time;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.Month;
-import java.time.Year;
+import java.time.*;
+import java.util.Date;
 import java.util.List;
 
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
@@ -33,8 +33,16 @@ public class OnlineLibraryApplication {
 	@Autowired private LibraryWorkingTimeRepository libraryWorkingTimeRepository;
 	@Autowired private PublisherRepository publisherRepository;
 	@Autowired private UserRepository userRepository;
+	@Autowired private RentedRepository rentedRepository;
 
 	PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+	@Bean
+	public OpenAPI freelanceOpenAPI() {
+		return new OpenAPI().info(new Info().title("Library API")
+						.description("REST API for an online library")
+						.version("v0.0.1"));
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(OnlineLibraryApplication.class, args);
@@ -122,14 +130,63 @@ public class OnlineLibraryApplication {
 			.library(libraryMedijana)
 			.build();
 
-	User user = User.builder()
-			.email("slobodanmitrovic90@gmail.com")
-			.password(passwordEncoder.encode("password"))
-			.firstName("Slobodan")
-			.lastName("Mitrovic")
-			.dateOfBirth(LocalDate.of(1990, Month.JUNE, 1))
-			.gender(Gender.MALE)
+	User user1 = User.builder()
+			.email("shepard@gmail.com")
+			.password(passwordEncoder.encode("spectre"))
+			.firstName("Commander")
+			.lastName("Shepard")
+			.dateOfBirth(LocalDate.of(2154, Month.APRIL, 11))
+			.gender(Gender.OTHER)
 			.role(Role.ADMIN)
+			.build();
+
+	User user2 = User.builder()
+			.email("joker@gmail.com")
+			.password(passwordEncoder.encode("vrolik"))
+			.firstName("Jeff")
+			.lastName("Moreau")
+			.dateOfBirth(LocalDate.of(2155, Month.MAY, 14))
+			.gender(Gender.MALE)
+			.role(Role.STAFF)
+			.build();
+
+	User user3 = User.builder()
+			.email("tali@gmail.com")
+			.password(passwordEncoder.encode("keelahselai"))
+			.firstName("Tali'Zorah")
+			.lastName("nar Rayya")
+			.dateOfBirth(LocalDate.of(2161, Month.DECEMBER, 21))
+			.gender(Gender.FEMALE)
+			.role(Role.USER)
+			.build();
+
+	User user4 = User.builder()
+			.email("allers@gmail.com")
+			.password(passwordEncoder.encode("allers"))
+			.firstName("Diana")
+			.lastName("Allers")
+			.dateOfBirth(LocalDate.of(2162, Month.NOVEMBER, 13))
+			.gender(Gender.FEMALE)
+			.role(Role.GUEST)
+			.build();
+
+	Rented rented1 = Rented.builder()
+			.dateRented(LocalDateTime.of(LocalDate.of(2022, Month.AUGUST, 12), LocalTime.of(12, 56, 17)))
+			.dateReturned(LocalDateTime.of(LocalDate.of(2022, Month.AUGUST, 18), LocalTime.of(18, 14, 56)))
+			.user(user1)
+			.book(book1)
+			.build();
+
+	Rented rented2 = Rented.builder()
+			.dateRented(LocalDateTime.of(LocalDate.of(2022, Month.AUGUST, 12), LocalTime.of(14, 15, 56)))
+			.user(user1)
+			.book(book2)
+			.build();
+
+	Rented rented3 = Rented.builder()
+			.dateRented(LocalDateTime.of(LocalDate.of(2022, Month.AUGUST, 19), LocalTime.of(11, 56, 54)))
+			.user(user2)
+			.book(book1)
 			.build();
 
 	@Bean
@@ -147,9 +204,28 @@ public class OnlineLibraryApplication {
 			authorRepository.save(author1);
 			languageRepository.save(languageEnglish);
 			genreRepository.save(genreFantasy);
+
 			bookRepository.save(book1);
 			bookRepository.save(book2);
-			userRepository.save(user);
+
+			userRepository.save(user1);
+			userRepository.save(user2);
+			userRepository.save(user3);
+			userRepository.save(user4);
+
+			rentedRepository.save(rented1);
+			book1.setRented(true);
+			bookRepository.save(book1);
+			book1.setRented(false);
+			bookRepository.save(book1);
+
+			rentedRepository.save(rented2);
+			book2.setRented(true);
+			bookRepository.save(book2);
+
+			rentedRepository.save(rented3);
+			book1.setRented(true);
+			bookRepository.save(book1);
 		};
 	}
 }

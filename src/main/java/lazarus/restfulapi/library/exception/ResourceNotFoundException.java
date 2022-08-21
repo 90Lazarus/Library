@@ -13,6 +13,10 @@ public class ResourceNotFoundException extends ResourceException {
         super(resourceType, "Found no " + resourceType.toString() + " in the " + resourceType2.toString() + " with the id = " + id.toString());
     }
 
+    public ResourceNotFoundException(ErrorInfo.ResourceType resourceType, ErrorInfo.ResourceType resourceType2, Long id) {
+        super(resourceType, "Found no " + resourceType.toString() + " in the " + resourceType2.toString() + " with the id = " + id.toString());
+    }
+
     public ResourceNotFoundException(ErrorInfo.ResourceType resourceType1, Long id1, ErrorInfo.ResourceType resourceType2, Long id2) {
         super(resourceType2, resourceType2.toString() + " with the id = " + id2.toString() + " does not belong to the " + resourceType1.toString() + " with the id = " + id1.toString() + "!");
     }

@@ -61,12 +61,12 @@ public class Book {
     @ManyToOne @JoinColumn(name = "library_id")
     private Library library;
 
-    @Transient
+    @Builder.Default
     private boolean rented = false;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @OneToOne(mappedBy = "book")
-    private Rented rentedTo;
+    @OneToMany(mappedBy = "book")
+    private List<Rented> rentedTo;
 
     private boolean adult;
 

@@ -1,9 +1,11 @@
 package lazarus.restfulapi.library.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter @Builder @AllArgsConstructor @NoArgsConstructor
@@ -12,17 +14,22 @@ public class Rented {
     @Column(name = "rented_id")
     private Long id;
 
-    @NotNull
-    private Date dateRented;
+    @NotNull(message = "Date when the book is rented cannot be null")
+    private LocalDateTime dateRented;
 
-    private Date dateReturned;
+    @Builder.Default
+    private LocalDateTime dateReturned = null;
 
     @Transient
-    private Integer daysHeld;
+    private Long daysHeld;
 
-    @ManyToOne(optional = false) @JoinColumn(name = "user_id")
+    @ManyToOne(optional = false) @JoinColumn(name = "user_id", nullable = false)
+    @NotNull(message = "User field is mandatory!")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private User user;
 
-    @OneToOne(optional = false) @JoinColumn(name = "book_id", unique = true, nullable = false, updatable = false)
+    @ManyToOne(optional = false) @JoinColumn(name = "book_id")
+    @NotNull(message = "Book field is mandatory!")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Book book;
 }

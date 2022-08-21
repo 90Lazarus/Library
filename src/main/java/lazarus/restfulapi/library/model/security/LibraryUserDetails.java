@@ -1,8 +1,6 @@
 package lazarus.restfulapi.library.model.security;
 
 import lazarus.restfulapi.library.model.entity.User;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,7 +10,6 @@ import java.util.Collection;
 import java.util.List;
 
 public class LibraryUserDetails implements UserDetails {
-    String ROLE_PREFIX = "ROLE_";
     private User user;
 
     public LibraryUserDetails(User user) {
@@ -22,7 +19,7 @@ public class LibraryUserDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(ROLE_PREFIX + user.getRole().toString()));
+        authorities.add(new SimpleGrantedAuthority(user.getRole().toString()));
         return authorities;
     }
 

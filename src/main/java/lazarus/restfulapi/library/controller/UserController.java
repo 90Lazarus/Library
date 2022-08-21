@@ -1,7 +1,13 @@
 package lazarus.restfulapi.library.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lazarus.restfulapi.library.exception.InvalidRoleException;
+import lazarus.restfulapi.library.exception.PasswordsDontMatchException;
 import lazarus.restfulapi.library.exception.ResourceNotFoundException;
 import lazarus.restfulapi.library.exception.UniqueViolationException;
+import lazarus.restfulapi.library.model.dto.NewUserDTO;
 import lazarus.restfulapi.library.model.dto.UserDTO;
 import lazarus.restfulapi.library.model.enums.Role;
 import lazarus.restfulapi.library.service.UserService;
@@ -16,11 +22,13 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserController {
     @Autowired private UserService userService;
 
-    @GetMapping
+    @GetMapping("/users")
+    @Operation(summary = "Get the list of all users in the database, optionally sorted by parameters")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found users in the database")})
     public List<UserDTO> getUsers(@RequestParam(required = false, defaultValue = "0") Integer page,
                                   @RequestParam(required = false, defaultValue = "10") Integer size,
                                   @RequestParam(required = false, defaultValue = "ASC") Sort.Direction direction,
@@ -28,27 +36,51 @@ public class UserController {
         return userService.readUsers(page, size, direction, sortBy);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/users/{id}")
+    @Operation(summary = "View a user with an id")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found the user")})
     public UserDTO getUser(@PathVariable Long id) throws ResourceNotFoundException {
         return userService.readUserById(id);
     }
 
-    @PostMapping
-    public UserDTO saveUser(@RequestBody @Valid UserDTO userDTO) {
-        return userService.createUser(userDTO);
+    @GetMapping("/user")
+    @Operation(summary = "View your own user data")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Data retrieved")})
+    public NewUserDTO getUserInfo() {
+        return userService.readUserInfo();
     }
 
-    @PutMapping("/{id}")
-    public UserDTO updateUser(@PathVariable Long id, @RequestBody @Valid UserDTO userDTO) throws UniqueViolationException, ResourceNotFoundException {
-        return userService.updateUserById(id, userDTO);
+    @PostMapping("/register")
+    @Operation(summary = "Register a new user")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "User registered")})
+    public UserDTO saveUser(@RequestBody @Valid NewUserDTO newUserDTO) throws UniqueViolationException, PasswordsDontMatchException {
+        return userService.registerNewUser(newUserDTO);
     }
 
-//    @PutMapping("/{id}")
-//    public UserDTO updateUserRole(@PathVariable Long id, @RequestBody @Valid Role newRole) throws ResourceNotFoundException {
-//        return userService.updateUserRole(id, newRole);
+//    @PutMapping("/users/{id}")
+//    @Operation(summary = "Modify a user with an id")
+//    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "User updated")})
+//    public UserDTO updateUser(@PathVariable Long id, @RequestBody @Valid UserDTO userDTO) throws UniqueViolationException, ResourceNotFoundException {
+//        return userService.updateUserById(id, userDTO);
 //    }
 
-    @DeleteMapping("/{id}")
+    @PutMapping("/user")
+    @Operation(summary = "Modify your own user data")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Your data has been updated")})
+    public UserDTO modifyUser(@RequestBody @Valid NewUserDTO newUserDTO) throws UniqueViolationException, PasswordsDontMatchException {
+        return userService.modifyUserData(newUserDTO);
+    }
+
+    @PutMapping("/users/{id}")
+    @Operation(summary = "Modify a role for a user with an id")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "User's role modified")})
+    public UserDTO modifyRole(@PathVariable Long id, @RequestBody @Valid String role) throws ResourceNotFoundException, InvalidRoleException {
+        return userService.changeUserRoleById(id, role);
+    }
+
+    @DeleteMapping("/users/{id}")
+    @Operation(summary = "Delete a user with an id")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "User deleted")})
     public void deleteUser(@PathVariable Long id) throws ResourceNotFoundException {
         userService.deleteUserById(id);
     }

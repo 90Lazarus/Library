@@ -5,11 +5,12 @@ import lazarus.restfulapi.library.model.embed.Address;
 import lazarus.restfulapi.library.model.enums.Gender;
 import lazarus.restfulapi.library.model.enums.Role;
 import lombok.*;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Getter @Setter @Builder @AllArgsConstructor @NoArgsConstructor
@@ -46,11 +47,11 @@ public class User {
     @Embedded
     private Address address;
 
-    //@Builder.Default
+    @Builder.Default
     @Enumerated(EnumType.STRING)
-    private Role role; //= Role.GUEST;
+    private Role role = Role.USER;
 
     @OneToMany(mappedBy = "user")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private Set<Rented> booksRented;
+    private List<Rented> booksRented;
 }
