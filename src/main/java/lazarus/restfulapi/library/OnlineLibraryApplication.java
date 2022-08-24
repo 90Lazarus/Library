@@ -8,6 +8,7 @@ import lazarus.restfulapi.library.model.enums.FormatType;
 import lazarus.restfulapi.library.model.enums.Gender;
 import lazarus.restfulapi.library.model.enums.Role;
 import lazarus.restfulapi.library.repository.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Slf4j
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 public class OnlineLibraryApplication {
 	@Autowired private AuthorRepository authorRepository;
@@ -204,34 +206,54 @@ public class OnlineLibraryApplication {
 	@Bean
 	InitializingBean sendDatabase() {
 		return () -> {
+			log.info("Initializing Library database...");
+
+			log.info("Initializing Libraries...");
 			libraryRepository.save(libraryMedijana);
 			libraryRepository.save(libraryPantelej);
 			libraryRepository.save(libraryPalilula);
+			log.info("Libraries successfully initialized!");
 
+			log.info("Initializing Working Time for Libraries...");
 			libraryWorkingTimeRepository.save(LWHMonday);
 			libraryWorkingTimeRepository.save(LWHTuesday);
 			libraryWorkingTimeRepository.save(LWHWednesday);
+			log.info("Library Working Time successfully initialized!");
 
+			log.info("Initializing Publishers...");
 			publisherRepository.save(publisher1);
+			log.info("Publishers successfully initialized!");
+
+			log.info("Initializing Authors...");
 			authorRepository.save(author1);
 			authorRepository.save(author2);
+			log.info("Authors successfully initialized!");
 
+			log.info("Initializing Languages...");
 			languages.add(languageEnglish);
 			languages.add(languageFrench);
 			languages.add(languageSpanish);
 			languages.add(languageSerbian);
 			languageRepository.saveAll(languages);
+			log.info("Languages successfully initialized!");
 
+			log.info("Initializing Genres...");
 			genreRepository.save(genreFantasy);
+			log.info("Genres successfully initialized!");
 
+			log.info("Initializing Books...");
 			bookRepository.save(book1);
 			bookRepository.save(book2);
+			log.info("Books successfully initialized!");
 
+			log.info("Initializing Users...");
 			userRepository.save(user1);
 			userRepository.save(user2);
 			userRepository.save(user3);
 			userRepository.save(user4);
+			log.info("Users successfully initialized!");
 
+			log.info("Initializing Renting...");
 			rentedRepository.save(rented1);
 			book1.setRented(true);
 			bookRepository.save(book1);
@@ -245,6 +267,9 @@ public class OnlineLibraryApplication {
 			rentedRepository.save(rented3);
 			book1.setRented(true);
 			bookRepository.save(book1);
+			log.info("Renting successfully initialized!");
+
+			log.info("Library database successfully initialized!");
 		};
 	}
 }

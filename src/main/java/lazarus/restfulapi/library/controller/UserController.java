@@ -43,6 +43,20 @@ public class UserController {
         return userService.readAUser(userId);
     }
 
+    @GetMapping("login")
+    @Operation(summary = "Login")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Login successful!")})
+    public String login() {
+        return "Login successful!";
+    }
+
+    @GetMapping("logout")
+    @Operation(summary = "Logout")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Logout successful!")})
+    public String logout() {
+        return "Logout successful!";
+    }
+
     @GetMapping("/user")
     @Operation(summary = "Retrieve the information about the user who is currently logged in")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Data retrieved!")})

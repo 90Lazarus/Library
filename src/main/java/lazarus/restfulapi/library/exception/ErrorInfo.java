@@ -9,7 +9,8 @@ public class ErrorInfo {
     String message;
 
     public enum ErrorType {
-        RESOURCE_NOT_FOUND, UNIQUE_VIOLATION, PASSWORDS_DONT_MATCH, INVALID_ROLE
+        RESOURCE_NOT_FOUND, UNIQUE_VIOLATION, PASSWORDS_DONT_MATCH, INVALID_ROLE,
+        AUTHENTICATION, UNAUTHORIZED
     }
 
     public enum ResourceType {
@@ -25,6 +26,7 @@ public class ErrorInfo {
         PASSWORDS { @Override public String toString() { return "'Passwords'"; } },
         RENTING_INFO { @Override public String toString() { return "'Renting info'"; } },
         RENTING_HISTORY { @Override public String toString() { return "'Renting history'"; } },
-        ROLE { @Override public String toString() { return "'Role'"; } }
+        ROLE { @Override public String toString() { return "'Role'"; } },
+        ACCESS
     }
 }
