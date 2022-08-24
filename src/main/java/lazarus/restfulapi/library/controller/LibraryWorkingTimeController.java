@@ -22,37 +22,37 @@ public class LibraryWorkingTimeController {
     @Autowired private LibraryWorkingTimeService libraryWorkingTimeService;
 
     @GetMapping("/libraries/{libraryId}/working_time")
-    @Operation(summary = "View the list of all available working time for a library with an id")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found all working time for the library with the id")})
-    public List<LibraryWorkingTimeDTO> getAllLibraryWorkingTime(@Parameter(description = "id of the library") @PathVariable("libraryId") Long libraryId) throws ResourceNotFoundException {
+    @Operation(summary = "Retrieve the list of all available working time in the database for a library with an id")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found all working time for the library with the id!")})
+    public List<LibraryWorkingTimeDTO> getAllLibraryWorkingTime(@Parameter(description = "Library's id") @PathVariable("libraryId") Long libraryId) throws ResourceNotFoundException {
         return libraryWorkingTimeService.readLibraryWorkingTime(libraryId);
     }
 
     @GetMapping("/libraries/{libraryId}/working_time/{workingTimeId}")
-    @Operation(summary = "View a working time with an id for a library with an id")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found the working time with the id for the library with the id")})
-    public LibraryWorkingTimeDTO getOneLibraryWorkingTime(@Parameter(description = "id of the library") @PathVariable("libraryId") Long libraryId, @Parameter(description = "id of the working time") @PathVariable("workingTimeId") Long workingTimeId) throws ResourceNotFoundException {
-        return libraryWorkingTimeService.readLibraryWorkingTimeById(libraryId, workingTimeId);
+    @Operation(summary = "Retrieve a working time with an id for a library with an id")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found the working time with the id for the library with the id!")})
+    public LibraryWorkingTimeDTO getALibraryWorkingTime(@Parameter(description = "Library's id") @PathVariable("libraryId") Long libraryId, @Parameter(description = "Library Working Time's id") @PathVariable("workingTimeId") Long workingTimeId) throws ResourceNotFoundException {
+        return libraryWorkingTimeService.readALibraryWorkingTime(libraryId, workingTimeId);
     }
 
     @PostMapping("/libraries/{libraryId}/working_time")
-    @Operation(summary = "Add new working time for a library with an id")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Created new working time for the library with the id")})
-    public List<LibraryWorkingTimeDTO> saveLibraryWorkingTime(@Parameter(description = "id of the library") @PathVariable("libraryId") Long libraryId, @Valid @RequestBody LibraryWorkingTimeDTO libraryWorkingTimeDTO) throws ResourceNotFoundException {
-        return libraryWorkingTimeService.createLibraryWorkingTimeById(libraryId, libraryWorkingTimeDTO);
+    @Operation(summary = "Save a new working time in the database for a library with an id ")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Created new working time for the library with the id!")})
+    public LibraryWorkingTimeDTO postLibraryWorkingTime(@Parameter(description = "Library's id") @PathVariable("libraryId") Long libraryId, @RequestBody @Valid LibraryWorkingTimeDTO libraryWorkingTimeDTO) throws ResourceNotFoundException {
+        return libraryWorkingTimeService.createALibraryWorkingTime(libraryId, libraryWorkingTimeDTO);
     }
 
     @PutMapping("/libraries/{libraryId}/working_time/{workingTimeId}")
-    @Operation(summary = "Modify a working time with an id for a library with an id")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Modified the working time with the id for the library with the id")})
-    public LibraryWorkingTimeDTO updateLibraryWorkingTime(@Parameter(description = "id of the library") @PathVariable("libraryId") Long libraryId, @Parameter(description = "id of the working time") @PathVariable("workingTimeId") Long workingTimeId, @Valid @RequestBody LibraryWorkingTimeDTO libraryWorkingTimeDTO) throws ResourceNotFoundException {
-        return libraryWorkingTimeService.updateLibraryWorkingTimeById(libraryId, workingTimeId, libraryWorkingTimeDTO);
+    @Operation(summary = "Modify information about a working time with an id in the database for a library with an id")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Updated the working time with the id for the library with the id!")})
+    public LibraryWorkingTimeDTO putALibraryWorkingTime(@Parameter(description = "Library's id") @PathVariable("libraryId") Long libraryId, @Parameter(description = "Library Working Time's id") @PathVariable("workingTimeId") Long workingTimeId, @RequestBody @Valid LibraryWorkingTimeDTO libraryWorkingTimeDTO) throws ResourceNotFoundException {
+        return libraryWorkingTimeService.updateALibraryWorkingTime(libraryId, workingTimeId, libraryWorkingTimeDTO);
     }
 
-    @Operation(summary = "Delete a working time with an id for a library with an id")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Deleted the working time with the id for the library with the id")})
+    @Operation(summary = "Delete a working time with an id from the database for a library with an id")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Deleted the working time with the id for the library with the id!")})
     @DeleteMapping("/libraries/{libraryId}/working_time/{workingTimeId}")
-    public void deleteLibraryWorkingTime(@Parameter(description = "id of the library") @PathVariable("libraryId") Long libraryId, @Parameter(description = "id of the working time") @PathVariable("workingTimeId") Long workingTimeId) throws ResourceNotFoundException {
-        libraryWorkingTimeService.deleteLibraryWorkingTimeById(libraryId, workingTimeId);
+    public void deleteALibraryWorkingTime(@Parameter(description = "Library's id") @PathVariable("libraryId") Long libraryId, @Parameter(description = "Library Working Time's id") @PathVariable("workingTimeId") Long workingTimeId) throws ResourceNotFoundException {
+        libraryWorkingTimeService.deleteALibraryWorkingTime(libraryId, workingTimeId);
     }
 }

@@ -14,7 +14,7 @@ public class Language {
     @Column(name = "language_id")
     private Long id;
 
-    @NotNull(message = "Language name cannot be null")
+    @NotNull(message = "Language name cannot be null!")
     @Column(unique = true)
     private String name;
 
@@ -25,4 +25,14 @@ public class Language {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToMany(mappedBy = "languageOriginal")
     private List<Book> booksOriginal;
+
+    @PreRemove
+    public void deleteALanguage() {
+        if (!(this.getBooks().isEmpty())) {
+            this.getBooks().forEach(book -> book.setLanguage(null));
+        }
+        if (!(this.getBooksOriginal().isEmpty())) {
+            this.getBooksOriginal().forEach(book -> book.setLanguageOriginal(null));
+        }
+    }
 }

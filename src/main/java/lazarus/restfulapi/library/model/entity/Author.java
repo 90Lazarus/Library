@@ -16,7 +16,7 @@ public class Author {
     @Column(name = "author_id")
     private Long id;
 
-    @NotNull(message = "Full name of the author cannot be null")
+    @NotNull(message = "Full name of the author cannot be null!")
     private String fullName;
 
     private String penName;
@@ -27,8 +27,9 @@ public class Author {
     @Column(length = 100)
     private String nationality;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
-    private Gender gender;
+    private Gender gender = Gender.OTHER;
 
     private String occupation;
 
@@ -43,6 +44,13 @@ public class Author {
     private String authorWebsiteAddress;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @ManyToMany(mappedBy = "author", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "author")
     private List<Book> books;
+
+    @PreRemove
+    public void deleteAnAuthor() {
+        if (!(this.getBooks().isEmpty())) {
+            this.getBooks().forEach(book -> book.setAuthor(null));
+        }
+    }
 }

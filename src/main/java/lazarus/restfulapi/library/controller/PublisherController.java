@@ -1,6 +1,7 @@
 package lazarus.restfulapi.library.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lazarus.restfulapi.library.exception.ResourceNotFoundException;
@@ -24,8 +25,8 @@ public class PublisherController {
     @Autowired private PublisherService publisherService;
 
     @GetMapping
-    @Operation(summary = "Get the list of all available publishers, optionally sorted by parameters")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found publishers in the database")})
+    @Operation(summary = "Retrieve the pageable list of all available publishers in the database, optionally sorted by parameters")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found publishers in the database!")})
     public List<PublisherDTO> getPublishers(@RequestParam(required = false, defaultValue = "0") Integer page,
                                             @RequestParam(required = false, defaultValue = "10") Integer size,
                                             @RequestParam(required = false, defaultValue = "ASC") Sort.Direction direction,
@@ -33,38 +34,45 @@ public class PublisherController {
         return publisherService.readPublishers(page, size, direction, sortBy);
     }
 
-    @GetMapping("/{id}")
-    @Operation(summary = "View a publisher with an id")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found the publisher")})
-    public PublisherDTO getPublisher(@PathVariable Long id) throws ResourceNotFoundException {
-        return publisherService.readPublisherById(id);
+    @GetMapping("/{publisherId}")
+    @Operation(summary = "Retrieve the information about a publisher in the database with a specified id")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found the publisher!")})
+    public PublisherDTO getAPublisher(@Parameter(description = "Publisher's id") @PathVariable Long publisherId) throws ResourceNotFoundException {
+        return publisherService.readAPublisher(publisherId);
     }
 
-    @GetMapping("/{id}/books")
-    @Operation(summary = "Get the list of all books by a publisher with an id")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found all books for the publisher with an id")})
-    public List<BookDTO> getPublisherBooks(@PathVariable Long id) throws ResourceNotFoundException {
-        return publisherService.readPublisherBooks(id);
+    @GetMapping("/{publisherId}/books")
+    @Operation(summary = "Retrieve all of the books in the database that are published by a publisher with a specified id")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found books by a publisher!")})
+    public List<BookDTO> getPublisherBooks(@Parameter(description = "Publisher's id") @PathVariable Long publisherId) throws ResourceNotFoundException {
+        return publisherService.readPublisherBooks(publisherId);
+    }
+
+    @GetMapping("/{publisherId}/original/books")
+    @Operation(summary = "Retrieve all of the books in the database that were originally published by a publisher with a specified id")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found books by a publisher!")})
+    public List<BookDTO> getOriginalPublisherBooks(@Parameter(description = "Publisher's id") @PathVariable Long publisherId) throws ResourceNotFoundException {
+        return publisherService.readOriginalPublisherBooks(publisherId);
     }
 
     @PostMapping
-    @Operation(summary = "Create a new unique publisher")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "New publisher created")})
-    public PublisherDTO savePublisher(@RequestBody @Valid PublisherDTO publisherDTO) throws UniqueViolationException {
-        return publisherService.createPublisher(publisherDTO);
+    @Operation(summary = "Save a new unique publisher in the database")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "New publisher created!")})
+    public PublisherDTO postAPublisher(@RequestBody @Valid PublisherDTO publisherDTO) throws UniqueViolationException {
+        return publisherService.createAPublisher(publisherDTO);
     }
 
-    @PutMapping("/{id}")
-    @Operation(summary = "Modify a publisher with an id")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Publisher updated")})
-    public PublisherDTO updatePublisher(@PathVariable Long id, @RequestBody @Valid PublisherDTO publisherDTO) throws ResourceNotFoundException, UniqueViolationException {
-        return publisherService.updatePublisherById(id, publisherDTO);
+    @PutMapping("/{publisherId}")
+    @Operation(summary = "Modify information about a publisher in the database with a specified id")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Publisher updated!")})
+    public PublisherDTO updateAPublisher(@Parameter(description = "Publisher's id") @PathVariable Long publisherId, @RequestBody @Valid PublisherDTO publisherDTO) throws ResourceNotFoundException, UniqueViolationException {
+        return publisherService.updateAPublisher(publisherId, publisherDTO);
     }
 
-    @DeleteMapping("/{id}")
-    @Operation(summary = "Delete a publisher with an id")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Publisher deleted")})
-    public void deletePublisher(@PathVariable Long id) throws ResourceNotFoundException {
-        publisherService.deletePublisherById(id);
+    @DeleteMapping("/{publisherId}")
+    @Operation(summary = "Delete a publisher with a specified id from the database")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Publisher deleted!")})
+    public void deleteAPublisher(@Parameter(description = "Publisher's id") @PathVariable Long publisherId) throws ResourceNotFoundException {
+        publisherService.deleteAPublisher(publisherId);
     }
 }

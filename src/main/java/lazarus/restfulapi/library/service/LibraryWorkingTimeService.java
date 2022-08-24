@@ -16,17 +16,16 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class LibraryWorkingTimeService {
-
     @Autowired private LibraryRepository libraryRepository;
     @Autowired private LibraryWorkingTimeRepository libraryWorkingTimeRepository;
     @Autowired private LibraryWorkingTimeMapper libraryWorkingTimeMapper;
 
-    public List<LibraryWorkingTimeDTO> createLibraryWorkingTimeById(Long libraryId, LibraryWorkingTimeDTO libraryWorkingTimeDTO) throws ResourceNotFoundException {
+    public LibraryWorkingTimeDTO createALibraryWorkingTime(Long libraryId, LibraryWorkingTimeDTO libraryWorkingTimeDTO) throws ResourceNotFoundException {
         if (libraryRepository.findById(libraryId).isPresent()) {
-                LibraryWorkingTime libraryWorkingTime = libraryWorkingTimeMapper.toLibraryWorkingTime(libraryWorkingTimeDTO);
+                LibraryWorkingTime libraryWorkingTime = libraryWorkingTimeMapper.libraryWorkingTimeDTOtoLibraryWorkingTime(libraryWorkingTimeDTO);
                 libraryWorkingTime.setLibrary(libraryRepository.findById(libraryId).get());
                 libraryWorkingTimeRepository.save(libraryWorkingTime);
-                return libraryWorkingTimeMapper.toLibraryWorkingTimeDTOs(libraryRepository.findById(libraryId).get().getWorkingTime());
+                return libraryWorkingTimeMapper.libraryWorkingTimeToLibraryWorkingTimeDTO(libraryWorkingTime);
         } else {
             throw new ResourceNotFoundException(ErrorInfo.ResourceType.LIBRARY, libraryId);
         }
@@ -35,7 +34,7 @@ public class LibraryWorkingTimeService {
     public List<LibraryWorkingTimeDTO> readLibraryWorkingTime(Long libraryId) throws ResourceNotFoundException {
         if (libraryRepository.findById(libraryId).isPresent()) {
             if (!(libraryRepository.findById(libraryId).get().getWorkingTime().isEmpty())) {
-                return libraryWorkingTimeMapper.toLibraryWorkingTimeDTOs(libraryRepository.findById(libraryId).get().getWorkingTime());
+                return libraryWorkingTimeMapper.libraryWorkingTimeToLibraryWorkingTimeDTOs(libraryRepository.findById(libraryId).get().getWorkingTime());
             } else {
                 throw new ResourceNotFoundException(ErrorInfo.ResourceType.LIBRARY_WORKING_TIME);
             }
@@ -44,10 +43,10 @@ public class LibraryWorkingTimeService {
         }
     }
 
-    public LibraryWorkingTimeDTO readLibraryWorkingTimeById(Long libraryId, Long libraryWorkingTimeId) throws ResourceNotFoundException {
+    public LibraryWorkingTimeDTO readALibraryWorkingTime(Long libraryId, Long libraryWorkingTimeId) throws ResourceNotFoundException {
         if (libraryRepository.findById(libraryId).isPresent()) {
             if(libraryWorkingTimeRepository.existsByIdAndLibrary_Id(libraryWorkingTimeId, libraryId)) {
-                return libraryWorkingTimeMapper.toLibraryWorkingTimeDTO(libraryWorkingTimeRepository.findByIdAndLibrary_Id(libraryWorkingTimeId, libraryId));
+                return libraryWorkingTimeMapper.libraryWorkingTimeToLibraryWorkingTimeDTO(libraryWorkingTimeRepository.findByIdAndLibrary_Id(libraryWorkingTimeId, libraryId));
             } else {
                 throw new ResourceNotFoundException(ErrorInfo.ResourceType.LIBRARY, libraryId, ErrorInfo.ResourceType.LIBRARY_WORKING_TIME, libraryWorkingTimeId);
             }
@@ -56,17 +55,17 @@ public class LibraryWorkingTimeService {
         }
     }
 
-    public LibraryWorkingTimeDTO updateLibraryWorkingTimeById(Long libraryId, Long libraryWorkingTimeId, LibraryWorkingTimeDTO libraryWorkingTimeDTO) throws ResourceNotFoundException {
+    public LibraryWorkingTimeDTO updateALibraryWorkingTime(Long libraryId, Long libraryWorkingTimeId, LibraryWorkingTimeDTO libraryWorkingTimeDTO) throws ResourceNotFoundException {
         if (libraryRepository.findById(libraryId).isPresent()) {
             if (libraryWorkingTimeRepository.findById(libraryWorkingTimeId).isPresent()) {
                 if (libraryWorkingTimeRepository.existsByIdAndLibrary_Id(libraryWorkingTimeId, libraryId)) {
-                    LibraryWorkingTime newLibraryWorkingTime = libraryWorkingTimeMapper.toLibraryWorkingTime(libraryWorkingTimeDTO);
+                    LibraryWorkingTime newLibraryWorkingTime = libraryWorkingTimeMapper.libraryWorkingTimeDTOtoLibraryWorkingTime(libraryWorkingTimeDTO);
                     LibraryWorkingTime oldLibraryWorkingTime = libraryWorkingTimeRepository.findById(libraryWorkingTimeId).get();
                     oldLibraryWorkingTime.setDayOfWeek(newLibraryWorkingTime.getDayOfWeek());
                     oldLibraryWorkingTime.setOpeningTime(newLibraryWorkingTime.getOpeningTime());
                     oldLibraryWorkingTime.setClosingTime(newLibraryWorkingTime.getClosingTime());
                     libraryWorkingTimeRepository.save(oldLibraryWorkingTime);
-                    return libraryWorkingTimeMapper.toLibraryWorkingTimeDTO(oldLibraryWorkingTime);
+                    return libraryWorkingTimeMapper.libraryWorkingTimeToLibraryWorkingTimeDTO(oldLibraryWorkingTime);
                 } else {
                     throw new ResourceNotFoundException(ErrorInfo.ResourceType.LIBRARY, libraryId, ErrorInfo.ResourceType.LIBRARY_WORKING_TIME, libraryWorkingTimeId);
                 }
@@ -78,7 +77,7 @@ public class LibraryWorkingTimeService {
         }
     }
 
-    public void deleteLibraryWorkingTimeById(Long libraryId, Long libraryWorkingTimeId) throws ResourceNotFoundException {
+    public void deleteALibraryWorkingTime(Long libraryId, Long libraryWorkingTimeId) throws ResourceNotFoundException {
         if (libraryRepository.findById(libraryId).isPresent()) {
             if (libraryWorkingTimeRepository.findById(libraryWorkingTimeId).isPresent()) {
                 if (libraryWorkingTimeRepository.existsByIdAndLibrary_Id(libraryWorkingTimeId, libraryId)) {

@@ -8,7 +8,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface LibraryMapper {
-    LibraryDTO toLibraryDTO(Library library);
-    List<LibraryDTO> toLibraryDTOs(List<Library> libraries);
-    Library toLibrary(LibraryDTO libraryDTO);
+    LibraryDTO libraryToLibraryDTO(Library library);
+    List<LibraryDTO> librariesToLibraryDTOs(List<Library> libraries);
+    Library libraryDTOToLibrary(LibraryDTO libraryDTO);
 }

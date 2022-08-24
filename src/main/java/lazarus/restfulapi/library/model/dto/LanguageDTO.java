@@ -11,10 +11,4 @@ public class LanguageDTO {
 
     @Schema(description = "Language name", example = "English")
     private String name;
-
-    //@JsonIgnore
-    //private List<Book> books;
-
-    //@JsonIgnore
-    //private List<Book> booksOriginal;
 }

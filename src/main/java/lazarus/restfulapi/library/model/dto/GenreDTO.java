@@ -12,9 +12,6 @@ public class GenreDTO {
     @Schema(description = "Genre name", example = "Fantasy")
     private String name;
 
-    @Schema(description = "Genre description", example = "Fantasy is a genre of speculative fiction involving magical elements, typically set in a fictional universe and sometimes inspired by mythology and folklore")
+    @Schema(description = "Genre description", example = "Fantasy is a genre of speculative fiction involving magical elements, typically set in a fictional universe and sometimes inspired by mythology and folklore.")
     private String description;
-
-    //@JsonIgnore
-    //private List<Book> books;
 }

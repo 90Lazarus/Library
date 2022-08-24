@@ -8,7 +8,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface LibraryWorkingTimeMapper {
-    LibraryWorkingTimeDTO toLibraryWorkingTimeDTO(LibraryWorkingTime libraryWorkingTime);
-    List<LibraryWorkingTimeDTO> toLibraryWorkingTimeDTOs(List<LibraryWorkingTime> libraryWorkingTime);
-    LibraryWorkingTime toLibraryWorkingTime(LibraryWorkingTimeDTO libraryWorkingTimeDTO);
+    LibraryWorkingTimeDTO libraryWorkingTimeToLibraryWorkingTimeDTO(LibraryWorkingTime libraryWorkingTime);
+    List<LibraryWorkingTimeDTO> libraryWorkingTimeToLibraryWorkingTimeDTOs(List<LibraryWorkingTime> libraryWorkingTime);
+    LibraryWorkingTime libraryWorkingTimeDTOtoLibraryWorkingTime(LibraryWorkingTimeDTO libraryWorkingTimeDTO);
 }

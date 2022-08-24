@@ -1,12 +1,12 @@
 package lazarus.restfulapi.library.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lazarus.restfulapi.library.exception.ResourceNotFoundException;
 import lazarus.restfulapi.library.exception.UniqueViolationException;
-import lazarus.restfulapi.library.model.dto.admin.AdminRentedDTO;
-import lazarus.restfulapi.library.model.dto.user.UserRentedDTO;
+import lazarus.restfulapi.library.model.dto.RentedDTO;
 import lazarus.restfulapi.library.service.RentedService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,55 +20,54 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 public class RentedController {
-
     @Autowired private RentedService rentedService;
 
-    @GetMapping("/users/{id}/rented")
-    @Operation(summary = "Admin - View the list of all books currently rented by a user with an id")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found the rented books for the user")})
-    public List<AdminRentedDTO> adminGetUserRentedBooks(@PathVariable Long id) throws ResourceNotFoundException {
-        return rentedService.readBooksRentedById(id);
+    @GetMapping("/users/{userId}/rented")
+    @Operation(summary = "Admin - Retrieve the list of all books currently rented by a user with a specified id")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found the rented books for the user!")})
+    public List<RentedDTO> getUserRentedBooks(@Parameter(description = "User's id") @PathVariable Long userId) throws ResourceNotFoundException {
+        return rentedService.readRentedBooksByUser(userId);
     }
 
-    @GetMapping("/users/{id}/rented/history")
-    @Operation(summary = "Admin - View the history of renting by a user with an id")
+    @GetMapping("/users/{userId}/rented/history")
+    @Operation(summary = "Admin - Retrieve the history of renting by a user with a specified id")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found the renting history for the user")})
-    public List<AdminRentedDTO> adminGetUserRentingHistory(@PathVariable Long id) throws ResourceNotFoundException {
-        return rentedService.readRentingHistoryById(id);
+    public List<RentedDTO> getUserRentingHistory(@Parameter(description = "User's id") @PathVariable Long userId) throws ResourceNotFoundException {
+        return rentedService.readRentingHistoryByUser(userId);
     }
 
     @GetMapping("/user/rented")
-    @Operation(summary = "User - View the list of books currently rented by a currently logged in user")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found the rented books for the user")})
-    public List<UserRentedDTO> userGetUserRentedBooks() throws ResourceNotFoundException {
-        return rentedService.readBooksRented();
+    @Operation(summary = "User - Retrieve the list of books currently rented by a currently logged in user")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found the rented books for the user!")})
+    public List<RentedDTO> getMyRentedBooks() throws ResourceNotFoundException {
+        return rentedService.readMyBooksRented();
     }
 
     @GetMapping("/user/rented/history")
-    @Operation(summary = "User - View the history of renting by a currently logged in user")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found the renting history for the user")})
-    public List<UserRentedDTO> userGetUserRentingHistory() throws ResourceNotFoundException {
-        return rentedService.readRentingHistory();
+    @Operation(summary = "User - Retrieve the history of renting by a currently logged in user")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found the renting history for the user!")})
+    public List<RentedDTO> getMyRentingHistory() throws ResourceNotFoundException {
+        return rentedService.readMyRentingHistory();
     }
 
     @PostMapping("/users/{userId}/rented/{bookId}")
-    @Operation(summary = "Admin - Rent a book with an id for a user with an id")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Book rented")})
-    public AdminRentedDTO saveRented(@PathVariable Long userId, @PathVariable Long bookId, @RequestBody @Valid AdminRentedDTO adminRentedDTO) throws ResourceNotFoundException, UniqueViolationException {
-        return rentedService.createRented(userId, bookId, adminRentedDTO);
+    @Operation(summary = "Admin - Rent a book with a specified id for a user with a specified id")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Book rented!")})
+    public RentedDTO rentABook(@Parameter(description = "User's id") @PathVariable Long userId, @Parameter(description = "Book's id") @PathVariable Long bookId, @RequestBody @Valid RentedDTO rentedDTO) throws ResourceNotFoundException, UniqueViolationException {
+        return rentedService.createARented(userId, bookId, rentedDTO);
     }
 
     @PutMapping("/users/{userId}/rented/{bookId}")
-    @Operation(summary = "Admin - Return a book with an id for a user with an id")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Rented info modified")})
-    public AdminRentedDTO updateRented(@PathVariable Long userId, @PathVariable Long bookId, @RequestBody @Valid AdminRentedDTO adminRentedDTO) throws ResourceNotFoundException {
-        return rentedService.updateRentedById(userId, bookId, adminRentedDTO);
+    @Operation(summary = "Admin - Return a book with a specified id for a user with a specified id")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Renting information modified!")})
+    public RentedDTO updateARented(@Parameter(description = "User's id") @PathVariable Long userId, @Parameter(description = "Book's id") @PathVariable Long bookId, @RequestBody @Valid RentedDTO rentedDTO) throws ResourceNotFoundException {
+        return rentedService.updateARented(userId, bookId, rentedDTO);
     }
 
     @DeleteMapping("/users/{userId}/rented/{rentedId}")
-    @Operation(summary = "Admin - Delete rented information with an id for a user with an id")
+    @Operation(summary = "Admin - Delete a rented information with a specified id from the database for a user with a specified id")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Rented info deleted")})
-    public void deleteRented(@PathVariable Long userId, @PathVariable Long rentedId) throws ResourceNotFoundException {
-        rentedService.deleteRentedById(userId, rentedId);
+    public void deleteARented(@Parameter(description = "User's id") @PathVariable Long userId, @Parameter(description = "Rented id") @PathVariable Long rentedId) throws ResourceNotFoundException {
+        rentedService.deleteARented(userId, rentedId);
     }
 }

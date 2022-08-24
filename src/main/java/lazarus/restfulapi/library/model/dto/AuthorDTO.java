@@ -47,6 +47,4 @@ public class AuthorDTO {
 
     @Schema(description = "Author's website address", example = "http://jkrowling.com/")
     private String authorWebsiteAddress;
-
-    //private List<Book> books;
 }

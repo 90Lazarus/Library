@@ -20,7 +20,4 @@ public class LibraryWorkingTimeDTO {
 
     @Schema(description = "The time at which the library closes in 'HH:mm:ss' format", example = "20:00:00")
     private Time closingTime;
-
-    //@JsonIgnore
-    //private Library library;
 }

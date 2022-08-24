@@ -14,67 +14,61 @@ import lazarus.restfulapi.library.repository.LibraryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class LibraryService {
-
     @Autowired private LibraryRepository libraryRepository;
     @Autowired private LibraryMapper libraryMapper;
     @Autowired private BookRepository bookRepository;
     @Autowired private BookMapper bookMapper;
 
-    public LibraryDTO createLibrary(LibraryDTO libraryDTO) {
-        Library library = libraryMapper.toLibrary(libraryDTO);
+    public LibraryDTO createALibrary(LibraryDTO libraryDTO) {
+        Library library = libraryMapper.libraryDTOToLibrary(libraryDTO);
         libraryRepository.save(library);
-        return libraryMapper.toLibraryDTO(library);
+        return libraryMapper.libraryToLibraryDTO(library);
     }
 
     public List<LibraryDTO> readLibraries(Integer page, Integer size, Sort.Direction direction, String sortBy) throws ResourceNotFoundException {
         if (!(libraryRepository.findAll().isEmpty())) {
             List<Library> libraries = libraryRepository.findAll(PageRequest.of(page, size, direction, sortBy)).toList();
-            for (Library library : libraries) {
-                library.setOpen(checkIfLibraryIsOpen(library.getId()));
-                library.setSize(setLibrarySize(library.getId()));
-            }
-            return libraryMapper.toLibraryDTOs(libraries);
+            return libraryMapper.librariesToLibraryDTOs(libraries);
         } else {
             throw new ResourceNotFoundException(ErrorInfo.ResourceType.LIBRARY);
         }
     }
 
-    public LibraryDTO readLibraryById(Long id) throws ResourceNotFoundException {
-        Library library = libraryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ErrorInfo.ResourceType.LIBRARY, id));
-        library.setOpen(checkIfLibraryIsOpen(library.getId()));
-        library.setSize(setLibrarySize(id));
-        return libraryMapper.toLibraryDTO(library);
-    }
-
-    public List<BookDTO> readLibraryBooks(Long id, Integer page, Integer size, Sort.Direction direction, String sortBy) throws ResourceNotFoundException {
-        if (libraryRepository.findById(id).isPresent()) {
-            if (!(libraryRepository.findById(id).get().getBooks().isEmpty())) {
-                List<Book> books = bookRepository.findAll(PageRequest.of(page, size, direction, sortBy)).toList();
-                books.stream().filter(book -> book.getLibrary().getId().equals(id)).collect(Collectors.toList());
-                return bookMapper.booksToBookDTOs(books);
-            } else {
-                throw new ResourceNotFoundException(ErrorInfo.ResourceType.BOOK, id, ErrorInfo.ResourceType.LIBRARY);
-            }
+    public LibraryDTO readALibrary(Long libraryId) throws ResourceNotFoundException {
+        if (libraryRepository.findById(libraryId).isPresent()) {
+            Library library = libraryRepository.findById(libraryId).get();
+            return libraryMapper.libraryToLibraryDTO(library);
         } else {
-            throw new ResourceNotFoundException(ErrorInfo.ResourceType.LIBRARY, id);
+            throw new ResourceNotFoundException(ErrorInfo.ResourceType.LIBRARY, libraryId);
         }
     }
 
-    public BookDTO readLibraryBookById(Long libraryId, Long bookId) throws ResourceNotFoundException {
+    public List<BookDTO> readLibraryBooks(Long libraryId, Integer page, Integer size, Sort.Direction direction, String sortBy) throws ResourceNotFoundException {
+        if (libraryRepository.findById(libraryId).isPresent()) {
+            if (!(libraryRepository.findById(libraryId).get().getBooks().isEmpty())) {
+                List<Book> books = bookRepository.findAll(PageRequest.of(page, size, direction, sortBy)).toList();
+                books.stream().filter(book -> book.getLibrary().getId().equals(libraryId)).collect(Collectors.toList());
+                return bookMapper.booksToBookDTOs(books);
+            } else {
+                throw new ResourceNotFoundException(ErrorInfo.ResourceType.BOOK, ErrorInfo.ResourceType.LIBRARY, libraryId);
+            }
+        } else {
+            throw new ResourceNotFoundException(ErrorInfo.ResourceType.LIBRARY, libraryId);
+        }
+    }
+
+    public BookDTO readALibraryBook(Long libraryId, Long bookId) throws ResourceNotFoundException {
         if (libraryRepository.findById(libraryId).isPresent()) {
             if (bookRepository.findById(bookId).isPresent()) {
                 if (bookRepository.existsByIdAndLibrary_Id(bookId, libraryId)) {
@@ -90,43 +84,26 @@ public class LibraryService {
         }
     }
 
-    public LibraryDTO updateLibraryById(Long id, LibraryDTO newLibraryDTO) throws ResourceNotFoundException {
-        if (libraryRepository.findById(id).isPresent()) {
-            Library newLibrary = libraryMapper.toLibrary(newLibraryDTO);
-            Library oldLibrary = libraryRepository.findById(id).get();
+    public LibraryDTO updateALibrary(Long libraryId, LibraryDTO newLibraryDTO) throws ResourceNotFoundException {
+        if (libraryRepository.findById(libraryId).isPresent()) {
+            Library newLibrary = libraryMapper.libraryDTOToLibrary(newLibraryDTO);
+            Library oldLibrary = libraryRepository.findById(libraryId).get();
             oldLibrary.setName(newLibrary.getName());
             oldLibrary.setYearEstablished(newLibrary.getYearEstablished());
             oldLibrary.setAddress(newLibrary.getAddress());
             oldLibrary.setWebsite(newLibrary.getWebsite());
             libraryRepository.save(oldLibrary);
-            return libraryMapper.toLibraryDTO(oldLibrary);
+            return libraryMapper.libraryToLibraryDTO(oldLibrary);
         } else {
-            throw new ResourceNotFoundException(ErrorInfo.ResourceType.LIBRARY, id);
+            throw new ResourceNotFoundException(ErrorInfo.ResourceType.LIBRARY, libraryId);
         }
     }
 
-    public void deleteLibraryById(Long id) throws ResourceNotFoundException {
-        if (libraryRepository.findById(id).isPresent()) {
-            libraryRepository.deleteById(id);
+    public void deleteALibrary(Long libraryId) throws ResourceNotFoundException {
+        if (libraryRepository.findById(libraryId).isPresent()) {
+            libraryRepository.deleteById(libraryId);
         } else {
-            throw new ResourceNotFoundException(ErrorInfo.ResourceType.LIBRARY, id);
+            throw new ResourceNotFoundException(ErrorInfo.ResourceType.LIBRARY, libraryId);
         }
-    }
-
-    private boolean checkIfLibraryIsOpen(Long id) {
-        Library library = libraryRepository.getReferenceById(id);
-        boolean isOpen = false;
-        for (LibraryWorkingTime libraryWorkingTime : library.getWorkingTime()) {
-            if (LocalDate.now().getDayOfWeek() == libraryWorkingTime.getDayOfWeek()) {
-                if (LocalTime.now().isAfter(libraryWorkingTime.getOpeningTime().toLocalTime()) && LocalTime.now().isBefore(libraryWorkingTime.getClosingTime().toLocalTime())) {
-                    isOpen = true;
-                }
-            }
-        }
-        return isOpen;
-    }
-
-    private Integer setLibrarySize(Long id) {
-        return libraryRepository.getReferenceById(id).getBooks().size();
     }
 }

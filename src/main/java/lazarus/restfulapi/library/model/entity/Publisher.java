@@ -16,7 +16,7 @@ public class Publisher {
     @Column(name = "publisher_id")
     private Long id;
 
-    @NotNull(message = "Publisher name cannot be null")
+    @NotNull(message = "Publisher name cannot be null!")
     @Column(unique = true)
     private String name;
 
@@ -34,12 +34,17 @@ public class Publisher {
     @OneToMany(mappedBy = "publisher")
     private List<Book> books;
 
-    @PreRemove
-    public void deletePublisher() {
-        this.getBooks().forEach(book -> book.setPublisher(null));
-    }
-
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToMany(mappedBy = "publisherOriginal")
     private List<Book> booksOriginal;
+
+    @PreRemove
+    public void deleteAPublisher() {
+        if (!(this.getBooks().isEmpty())) {
+            this.getBooks().forEach(book -> book.setPublisher(null));
+        }
+        if (!(this.getBooksOriginal().isEmpty())) {
+            this.getBooksOriginal().forEach(book -> book.setPublisherOriginal(null));
+        }
+    }
 }

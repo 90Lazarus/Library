@@ -50,11 +50,11 @@ public class BookDTO {
     @Schema(description = "Library in which the book is currently present", example = "Belgrade library")
     private Library library;
 
-    //@Schema(description = "The person the book is currently rented to", example = "Peter Parker")
-    //private Rented rentedTo;
-
-    private boolean adult;
+    @Schema(description = "Weather the book is rented to someone or not", example = "true")
     private boolean rented;
+
+    @Schema(description = "Weather the age of 18 or over is required to rent the book", example = "false")
+    private boolean adult;
 
     @Schema(description = "Original title of the book", example = "Charlotte’s Web")
     private String titleOriginal;

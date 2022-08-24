@@ -14,7 +14,7 @@ public class Genre {
     @Column(name = "genre_id")
     private Long id;
 
-    @NotNull(message = "Genre name cannot be null")
+    @NotNull(message = "Genre name cannot be null!")
     @Column(unique = true)
     private String name;
 
@@ -24,4 +24,11 @@ public class Genre {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToMany(mappedBy = "genre")
     private List<Book> books;
+
+    @PreRemove
+    public void deleteAGenre() {
+        if (!(this.getBooks().isEmpty())) {
+            this.getBooks().forEach(book -> book.setGenre(null));
+        }
+    }
 }

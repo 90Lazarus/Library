@@ -65,16 +65,17 @@ public class Book {
     private boolean rented = false;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @OneToMany(mappedBy = "book")
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     private List<Rented> rentedTo;
 
-    private boolean adult;
+    @Builder.Default
+    private boolean adult = false;
 
-    //information of the original version of the book
+    //information about the original version of the book
     private String titleOriginal;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @ManyToMany() @JoinTable(name = "book_language",
+    @ManyToMany() @JoinTable(name = "book_language_original",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "language_id"))
     private List<Language> languageOriginal;
@@ -89,4 +90,29 @@ public class Book {
     private byte[] coverOriginal;
 
     private Integer numberOfPagesOriginal;
+
+    @PreRemove
+    public void deleteABook() {
+        if (!(this.getAuthor().isEmpty())) {
+            this.getAuthor().forEach(author -> author.setBooks(null));
+        }
+        if (!(this.getLanguage().isEmpty())) {
+            this.getLanguage().forEach(language -> language.setBooks(null));
+        }
+        if (this.getPublisher() != null) {
+            this.getPublisher().setBooks(null);
+        }
+        if (!(this.getGenre().isEmpty())) {
+            this.getGenre().forEach(genre -> genre.setBooks(null));
+        }
+        if (this.getLibrary() != null) {
+            this.getLibrary().setBooks(null);
+        }
+        if (!(this.getLanguageOriginal().isEmpty())) {
+            this.getLanguageOriginal().forEach(languageOriginal -> languageOriginal.setBooks(null));
+        }
+        if (this.getPublisherOriginal() != null) {
+            this.getPublisherOriginal().setBooks(null);
+        }
+    }
 }

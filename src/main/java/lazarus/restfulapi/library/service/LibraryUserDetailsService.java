@@ -21,7 +21,7 @@ public class LibraryUserDetailsService implements UserDetailsService {
             User user = userRepository.findByEmail(email);
             return new LibraryUserDetails(user);
         } else {
-                throw new UsernameNotFoundException("Could not find user");
+                throw new UsernameNotFoundException("Could not find user!");
             }
     }
 }

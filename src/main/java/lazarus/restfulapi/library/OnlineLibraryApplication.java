@@ -20,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.sql.Time;
 import java.time.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -101,9 +102,17 @@ public class OnlineLibraryApplication {
 			.shortBio("Joanne Rowling, born 31 July 1965, also known by her pen name J. K. Rowling, is a British author and philanthropist. She wrote a seven-volume children's fantasy series, Harry Potter, published from 1997 to 2007. The series has sold over 500 million copies, been translated into at least 70 languages, and spawned a global media franchise including films and video games.")
 			.build();
 
-	Language languageEnglish = Language.builder()
-			.name("English")
+	Author author2 = Author.builder()
+			.fullName("Ivo Andrić")
+			.nationality("Yugoslav")
+			.gender(Gender.MALE)
 			.build();
+
+	List<Language> languages = new ArrayList<>();
+	Language languageEnglish = Language.builder().name("English").build();
+	Language languageFrench = Language.builder().name("French").build();
+	Language languageSpanish = Language.builder().name("Spanish").build();
+	Language languageSerbian = Language.builder().name("Serbian").build();
 
 	Genre genreFantasy = Genre.builder()
 			.name("Fantasy")
@@ -118,6 +127,8 @@ public class OnlineLibraryApplication {
 			.formatType(FormatType.HARDCOVER)
 			.genre(List.of(genreFantasy))
 			.library(libraryMedijana)
+			.languageOriginal(List.of(languageFrench))
+			.publisherOriginal(publisher1)
 			.build();
 
 	Book book2 = Book.builder()
@@ -128,6 +139,7 @@ public class OnlineLibraryApplication {
 			.formatType(FormatType.PAPERBACK)
 			.genre(List.of(genreFantasy))
 			.library(libraryMedijana)
+			.adult(true)
 			.build();
 
 	User user1 = User.builder()
@@ -135,7 +147,7 @@ public class OnlineLibraryApplication {
 			.password(passwordEncoder.encode("spectre"))
 			.firstName("Commander")
 			.lastName("Shepard")
-			.dateOfBirth(LocalDate.of(2154, Month.APRIL, 11))
+			.dateOfBirth(LocalDate.of(2000, Month.APRIL, 11))
 			.gender(Gender.OTHER)
 			.role(Role.ADMIN)
 			.build();
@@ -145,7 +157,7 @@ public class OnlineLibraryApplication {
 			.password(passwordEncoder.encode("vrolik"))
 			.firstName("Jeff")
 			.lastName("Moreau")
-			.dateOfBirth(LocalDate.of(2155, Month.MAY, 14))
+			.dateOfBirth(LocalDate.of(2001, Month.MAY, 14))
 			.gender(Gender.MALE)
 			.role(Role.STAFF)
 			.build();
@@ -155,7 +167,7 @@ public class OnlineLibraryApplication {
 			.password(passwordEncoder.encode("keelahselai"))
 			.firstName("Tali'Zorah")
 			.lastName("nar Rayya")
-			.dateOfBirth(LocalDate.of(2161, Month.DECEMBER, 21))
+			.dateOfBirth(LocalDate.of(2002, Month.DECEMBER, 21))
 			.gender(Gender.FEMALE)
 			.role(Role.USER)
 			.build();
@@ -165,7 +177,7 @@ public class OnlineLibraryApplication {
 			.password(passwordEncoder.encode("allers"))
 			.firstName("Diana")
 			.lastName("Allers")
-			.dateOfBirth(LocalDate.of(2162, Month.NOVEMBER, 13))
+			.dateOfBirth(LocalDate.of(2006, Month.NOVEMBER, 13))
 			.gender(Gender.FEMALE)
 			.role(Role.GUEST)
 			.build();
@@ -202,7 +214,14 @@ public class OnlineLibraryApplication {
 
 			publisherRepository.save(publisher1);
 			authorRepository.save(author1);
-			languageRepository.save(languageEnglish);
+			authorRepository.save(author2);
+
+			languages.add(languageEnglish);
+			languages.add(languageFrench);
+			languages.add(languageSpanish);
+			languages.add(languageSerbian);
+			languageRepository.saveAll(languages);
+
 			genreRepository.save(genreFantasy);
 
 			bookRepository.save(book1);

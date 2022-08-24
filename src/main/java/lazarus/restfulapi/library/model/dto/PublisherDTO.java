@@ -26,10 +26,4 @@ public class PublisherDTO {
 
     @Schema(description = "Publisher's website", example = "https://www.bloomsbury.com/uk/")
     private String website;
-
-    //@JsonIgnore
-    //private List<Book> books;
-
-    //@JsonIgnore
-    //private List<Book> booksOriginal;
 }

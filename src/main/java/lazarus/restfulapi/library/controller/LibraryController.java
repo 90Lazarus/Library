@@ -1,6 +1,7 @@
 package lazarus.restfulapi.library.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lazarus.restfulapi.library.exception.ResourceNotFoundException;
@@ -20,12 +21,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping(path = "/libraries", produces = MediaType.APPLICATION_JSON_VALUE)
 public class LibraryController {
-
     @Autowired private LibraryService libraryService;
 
     @GetMapping
-    @Operation(summary = "Get the list of all available libraries, optionally sorted by parameters")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found libraries in the database")})
+    @Operation(summary = "Retrieve the pageable list of all available libraries in the database, optionally sorted by parameters")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found libraries in the database!")})
     public List<LibraryDTO> getLibraries(@RequestParam(required = false, defaultValue = "0") Integer page,
                                          @RequestParam(required = false, defaultValue = "10") Integer size,
                                          @RequestParam(required = false, defaultValue = "ASC") Sort.Direction direction,
@@ -33,49 +33,49 @@ public class LibraryController {
         return libraryService.readLibraries(page, size, direction, sortBy);
     }
 
-    @GetMapping("/{id}")
-    @Operation(summary = "View a library with an id")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found the library")})
-    public LibraryDTO getLibrary(@PathVariable Long id) throws ResourceNotFoundException {
-        return libraryService.readLibraryById(id);
+    @GetMapping("/{libraryId}")
+    @Operation(summary = "Retrieve the information about a library in the database with a specified id")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found the library!")})
+    public LibraryDTO getALibrary(@Parameter(description = "Library's id") @PathVariable Long libraryId) throws ResourceNotFoundException {
+        return libraryService.readALibrary(libraryId);
     }
 
-    @GetMapping("/{id}/books")
-    @Operation(summary = "Get the list of all books for a library with an id")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found books in the library")})
-    public List<BookDTO> getLibraryBooks(@PathVariable Long id,
+    @GetMapping("/{libraryId}/books")
+    @Operation(summary = "Retrieve the pageable list of all available books in a library with a specified id, optionally sorted by parameters")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found books in the library!")})
+    public List<BookDTO> getLibraryBooks(@Parameter(description = "Library's id") @PathVariable Long libraryId,
                                          @RequestParam(required = false, defaultValue = "0") Integer page,
                                          @RequestParam(required = false, defaultValue = "10") Integer size,
                                          @RequestParam(required = false, defaultValue = "ASC") Sort.Direction direction,
                                          @RequestParam(required = false, defaultValue = "id") String sortBy) throws ResourceNotFoundException {
-        return libraryService.readLibraryBooks(id, page, size, direction, sortBy);
+        return libraryService.readLibraryBooks(libraryId, page, size, direction, sortBy);
     }
 
     @GetMapping("/{libraryId}/books/{bookId}")
-    @Operation(summary = "View a book with an id for a library with an id")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found the book for the library with the id")})
-    public BookDTO getLibraryBookById(@PathVariable Long libraryId, @PathVariable Long bookId) throws ResourceNotFoundException {
-        return libraryService.readLibraryBookById(libraryId, bookId);
+    @Operation(summary = "Retrieve the information about a book with a specified id for a library with a specified id")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found the book in the library!")})
+    public BookDTO getALibraryBook(@Parameter(description = "Library's id") @PathVariable Long libraryId, @Parameter(description = "Book's id") @PathVariable Long bookId) throws ResourceNotFoundException {
+        return libraryService.readALibraryBook(libraryId, bookId);
     }
 
     @PostMapping
-    @Operation(summary = "Create a new library")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "New library created")})
-    public LibraryDTO saveLibrary(@RequestBody @Valid LibraryDTO libraryDTO) {
-        return libraryService.createLibrary(libraryDTO);
+    @Operation(summary = "Save a new author in the database")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "New library created!")})
+    public LibraryDTO postALibrary(@RequestBody @Valid LibraryDTO libraryDTO) {
+        return libraryService.createALibrary(libraryDTO);
     }
 
-    @PutMapping("/{id}")
-    @Operation(summary = "Modify a library with an id")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Library updated")})
-    public LibraryDTO updateLibrary(@PathVariable Long id, @RequestBody @Valid LibraryDTO libraryDTO) throws ResourceNotFoundException {
-        return libraryService.updateLibraryById(id, libraryDTO);
+    @PutMapping("/{libraryId}")
+    @Operation(summary = "Modify information about a library in the database with a specified id")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Library updated!")})
+    public LibraryDTO putALibrary(@Parameter(description = "Library's id") @PathVariable Long libraryId, @RequestBody @Valid LibraryDTO libraryDTO) throws ResourceNotFoundException {
+        return libraryService.updateALibrary(libraryId, libraryDTO);
     }
 
-    @DeleteMapping("/{id}")
-    @Operation(summary = "Delete a library with an id")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Library deleted")})
-    public void deleteLibrary(@PathVariable Long id) throws ResourceNotFoundException {
-        libraryService.deleteLibraryById(id);
+    @DeleteMapping("/{libraryId}")
+    @Operation(summary = "Delete a library with a specified id from the database")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Library deleted!")})
+    public void deleteLibrary(@Parameter(description = "Library's id") @PathVariable Long libraryId) throws ResourceNotFoundException {
+        libraryService.deleteALibrary(libraryId);
     }
 }

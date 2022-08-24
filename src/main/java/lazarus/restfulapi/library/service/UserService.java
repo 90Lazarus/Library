@@ -6,7 +6,7 @@ import lazarus.restfulapi.library.model.dto.UserDTO;
 import lazarus.restfulapi.library.model.entity.User;
 import lazarus.restfulapi.library.model.enums.Role;
 import lazarus.restfulapi.library.model.mapper.NewUserMapper;
-import lazarus.restfulapi.library.model.mapper.user.UserRentedMapper;
+import lazarus.restfulapi.library.model.mapper.RentedMapper;
 import lazarus.restfulapi.library.model.mapper.UserMapper;
 import lazarus.restfulapi.library.repository.RentedRepository;
 import lazarus.restfulapi.library.repository.UserRepository;
@@ -29,11 +29,11 @@ public class UserService {
     @Autowired private UserRepository userRepository;
     @Autowired private UserMapper userMapper;
     @Autowired private RentedRepository rentedRepository;
-    @Autowired private UserRentedMapper userRentedMapper;
+    @Autowired private RentedMapper rentedMapper;
     @Autowired private NewUserMapper newUserMapper;
     @Autowired private PasswordEncoder passwordEncoder;
 
-    public UserDTO registerNewUser(NewUserDTO newUserDTO) throws UniqueViolationException, PasswordsDontMatchException {
+    public UserDTO registerANewUser(NewUserDTO newUserDTO) throws UniqueViolationException, PasswordsDontMatchException {
         User newUser = newUserMapper.newUserDTOToUser(newUserDTO);
         if (!(userRepository.existsByEmail(newUser.getEmail()))) {
             if (Objects.equals(newUserDTO.getPassword(), newUserDTO.getMatchingPassword())) {
@@ -56,8 +56,12 @@ public class UserService {
         }
     }
 
-    public UserDTO readUserById(Long id) throws ResourceNotFoundException {
-        return userMapper.userToUserDTO(userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ErrorInfo.ResourceType.USER, id)));
+    public UserDTO readAUser(Long userId) throws ResourceNotFoundException {
+        if (userRepository.findById(userId).isPresent()) {
+            return userMapper.userToUserDTO(userRepository.findById(userId).get());
+        } else {
+            throw new ResourceNotFoundException(ErrorInfo.ResourceType.USER, userId);
+        }
     }
 
     public NewUserDTO readUserInfo() {
@@ -89,18 +93,18 @@ public class UserService {
         }
     }
 
-    public UserDTO changeUserRoleById(Long id, String role) throws ResourceNotFoundException, InvalidRoleException {
-        if (userRepository.findById(id).isPresent()) {
-            User user = userRepository.findById(id).get();
-            if (EnumUtils.isValidEnum(Role.class, role)) {
-                user.setRole(Role.valueOf(role));
+    public UserDTO changeUserRole(Long userId, String newUserRole) throws ResourceNotFoundException, InvalidRoleException {
+        if (userRepository.findById(userId).isPresent()) {
+            User user = userRepository.findById(userId).get();
+            if (EnumUtils.isValidEnum(Role.class, newUserRole)) {
+                user.setRole(Role.valueOf(newUserRole));
                 userRepository.save(user);
                 return userMapper.userToUserDTO(user);
             } else {
                 throw new InvalidRoleException(ErrorInfo.ResourceType.ROLE);
             }
         } else {
-            throw new ResourceNotFoundException(ErrorInfo.ResourceType.USER, id);
+            throw new ResourceNotFoundException(ErrorInfo.ResourceType.USER, userId);
         }
     }
 
@@ -127,11 +131,11 @@ public class UserService {
 //        }
 //    }
 
-    public void deleteUserById(Long id) throws ResourceNotFoundException {
-        if (userRepository.findById(id).isPresent()) {
-            userRepository.deleteById(id);
+    public void deleteAUser(Long userId) throws ResourceNotFoundException {
+        if (userRepository.findById(userId).isPresent()) {
+            userRepository.deleteById(userId);
         } else {
-            throw new ResourceNotFoundException(ErrorInfo.ResourceType.USER, id);
+            throw new ResourceNotFoundException(ErrorInfo.ResourceType.USER, userId);
         }
     }
 }

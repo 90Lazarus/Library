@@ -6,6 +6,8 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 
 @Entity
 @Getter @Setter @Builder @AllArgsConstructor @NoArgsConstructor
@@ -14,7 +16,7 @@ public class Rented {
     @Column(name = "rented_id")
     private Long id;
 
-    @NotNull(message = "Date when the book is rented cannot be null")
+    @NotNull(message = "Date when the book was rented cannot be null!")
     private LocalDateTime dateRented;
 
     @Builder.Default
@@ -23,7 +25,11 @@ public class Rented {
     @Transient
     private Long daysHeld;
 
-    @ManyToOne(optional = false) @JoinColumn(name = "user_id", nullable = false)
+    public Long getDaysHeld() {
+        return ChronoUnit.DAYS.between(this.getDateRented(), Objects.requireNonNullElseGet(this.getDateReturned(), LocalDateTime::now));
+    }
+
+    @ManyToOne(optional = false) @JoinColumn(name = "user_id")
     @NotNull(message = "User field is mandatory!")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private User user;

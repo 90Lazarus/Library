@@ -16,13 +16,13 @@ public class LibraryWorkingTime {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @NotNull(message = "Day of Week cannot be null")
+    @NotNull(message = "Day of Week cannot be null!")
     private DayOfWeek dayOfWeek;
 
-    @NotNull(message = "Opening Time cannot be null")
+    @NotNull(message = "Opening Time cannot be null!")
     private Time openingTime;
 
-    @NotNull(message = "Closing Time cannot be null")
+    @NotNull(message = "Closing Time cannot be null!")
     private Time closingTime;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
