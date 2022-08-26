@@ -2,6 +2,7 @@ package lazarus.restfulapi.library.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lazarus.restfulapi.library.model.embed.Address;
+import lazarus.restfulapi.library.model.embed.PasswordResetToken;
 import lazarus.restfulapi.library.model.enums.Gender;
 import lazarus.restfulapi.library.model.enums.Role;
 import lombok.*;
@@ -71,4 +72,7 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Rented> booksRented;
+
+    @Embedded
+    private PasswordResetToken passwordResetToken;
 }

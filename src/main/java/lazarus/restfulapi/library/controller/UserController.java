@@ -9,6 +9,7 @@ import lazarus.restfulapi.library.exception.PasswordsDontMatchException;
 import lazarus.restfulapi.library.exception.ResourceNotFoundException;
 import lazarus.restfulapi.library.exception.UniqueViolationException;
 import lazarus.restfulapi.library.model.dto.NewUserDTO;
+import lazarus.restfulapi.library.model.dto.PasswordResetDTO;
 import lazarus.restfulapi.library.model.dto.UserDTO;
 import lazarus.restfulapi.library.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -41,20 +42,6 @@ public class UserController {
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found the user!")})
     public UserDTO getAUser(@Parameter(description = "User's id") @PathVariable Long userId) throws ResourceNotFoundException {
         return userService.readAUser(userId);
-    }
-
-    @GetMapping("login")
-    @Operation(summary = "Login")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Login successful!")})
-    public String login() {
-        return "Login successful!";
-    }
-
-    @GetMapping("logout")
-    @Operation(summary = "Logout")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Logout successful!")})
-    public String logout() {
-        return "Logout successful!";
     }
 
     @GetMapping("/user")
@@ -97,5 +84,19 @@ public class UserController {
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "User deleted!")})
     public void deleteAUser(@Parameter(description = "User's id") @PathVariable Long userId) throws ResourceNotFoundException {
         userService.deleteAUser(userId);
+    }
+
+    @PostMapping("/forgot_password")
+    @Operation(summary = "Send a password reset token to a user provided email")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Password Reset Token sent!")})
+    public void userForgotPassword(@RequestBody String userEmail) throws ResourceNotFoundException {
+        userService.sendPasswordResetToken(userEmail);
+    }
+
+    @PutMapping("/reset_password")
+    @Operation(summary = "Save a new user password")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Password updated!")})
+    public UserDTO resetUserPassword(@RequestParam String token, @RequestBody @Valid PasswordResetDTO userUpdatedPassword) throws ResourceNotFoundException, PasswordsDontMatchException {
+        return userService.resetUserPassword(token, userUpdatedPassword);
     }
 }
