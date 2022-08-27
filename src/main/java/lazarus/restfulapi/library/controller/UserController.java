@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lazarus.restfulapi.library.documentation.UserPDFExporter;
 import lazarus.restfulapi.library.exception.InvalidRoleException;
 import lazarus.restfulapi.library.exception.PasswordsDontMatchException;
 import lazarus.restfulapi.library.exception.ResourceNotFoundException;
@@ -11,6 +12,7 @@ import lazarus.restfulapi.library.exception.UniqueViolationException;
 import lazarus.restfulapi.library.model.dto.NewUserDTO;
 import lazarus.restfulapi.library.model.dto.PasswordResetDTO;
 import lazarus.restfulapi.library.model.dto.UserDTO;
+import lazarus.restfulapi.library.model.mapper.UserMapper;
 import lazarus.restfulapi.library.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -26,6 +30,7 @@ import java.util.List;
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserController {
     @Autowired private UserService userService;
+    @Autowired private UserMapper userMapper;
 
     @GetMapping("/users")
     @Operation(summary = "Retrieve the pageable list of all available users in the database, optionally sorted by parameters")
@@ -91,5 +96,14 @@ public class UserController {
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Password updated!")})
     public UserDTO resetUserPassword(@RequestParam String token, @RequestBody @Valid PasswordResetDTO userUpdatedPassword) throws ResourceNotFoundException, PasswordsDontMatchException {
         return userService.resetUserPassword(token, userUpdatedPassword);
+    }
+
+    @GetMapping("/users/export/pdf")
+    @Operation(summary = "Generate a PDF document with the list of all of the users in the database")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "PDF generated!")})
+    public void exportUsersToPDF(HttpServletResponse response) throws IOException, ResourceNotFoundException {
+        List<UserDTO> listUsersDTO = userService.readUsers(0, 20, Sort.Direction.ASC, "id");
+        UserPDFExporter exporter = new UserPDFExporter(userMapper.userDTOsToUsers(listUsersDTO));
+        exporter.export(response);
     }
 }
