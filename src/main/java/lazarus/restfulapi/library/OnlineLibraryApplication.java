@@ -11,7 +11,6 @@ import lazarus.restfulapi.library.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -22,7 +21,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.sql.Time;
 import java.time.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -51,10 +49,10 @@ public class OnlineLibraryApplication {
 		SpringApplication.run(OnlineLibraryApplication.class, args);
 	}
 
-	Library libraryMedijana = Library.builder()
-			.name("Biblioteka Medijana")
+	Library libraryNisMedijana = Library.builder()
+			.name("Gradska biblioteka Medijana u Nišu")
 			.yearEstablished(Year.of(1895))
-			.address(new Address("Serbia", "", "Nis", "Medijana Street", 26))
+			.address(new Address("Srbija", "", "Niš", "Medijana Street", 26))
 			.build();
 
 	Library libraryPantelej = Library.builder()
@@ -73,21 +71,21 @@ public class OnlineLibraryApplication {
 			.dayOfWeek(DayOfWeek.MONDAY)
 			.openingTime(Time.valueOf("08:00:00"))
 			.closingTime(Time.valueOf("20:00:00"))
-			.library(libraryMedijana)
+			.library(libraryNisMedijana)
 			.build();
 
 	LibraryWorkingTime LWHTuesday = LibraryWorkingTime.builder()
 			.dayOfWeek(DayOfWeek.TUESDAY)
 			.openingTime(Time.valueOf("08:00:00"))
 			.closingTime(Time.valueOf("20:00:00"))
-			.library(libraryMedijana)
+			.library(libraryNisMedijana)
 			.build();
 
 	LibraryWorkingTime LWHWednesday = LibraryWorkingTime.builder()
 			.dayOfWeek(DayOfWeek.WEDNESDAY)
 			.openingTime(Time.valueOf("08:00:00"))
 			.closingTime(Time.valueOf("20:00:00"))
-			.library(libraryMedijana)
+			.library(libraryNisMedijana)
 			.build();
 
 	Publisher publisher1 = Publisher.builder()
@@ -128,7 +126,7 @@ public class OnlineLibraryApplication {
 			.publisher(publisher1)
 			.formatType(FormatType.HARDCOVER)
 			.genre(List.of(genreFantasy))
-			.library(libraryMedijana)
+			.library(libraryNisMedijana)
 			.languageOriginal(List.of(languageFrench))
 			.publisherOriginal(publisher1)
 			.build();
@@ -140,7 +138,7 @@ public class OnlineLibraryApplication {
 			.publisher(publisher1)
 			.formatType(FormatType.PAPERBACK)
 			.genre(List.of(genreFantasy))
-			.library(libraryMedijana)
+			.library(libraryNisMedijana)
 			.adult(true)
 			.build();
 
@@ -209,7 +207,7 @@ public class OnlineLibraryApplication {
 			log.info("Initializing Library database...");
 
 			log.info("Initializing Libraries...");
-			libraryRepository.save(libraryMedijana);
+			libraryRepository.save(libraryNisMedijana);
 			libraryRepository.save(libraryPantelej);
 			libraryRepository.save(libraryPalilula);
 			log.info("Libraries successfully initialized!");

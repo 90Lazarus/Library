@@ -58,13 +58,6 @@ public class UserController {
         return userService.registerANewUser(newUserDTO);
     }
 
-//    @PutMapping("/users/{id}")
-//    @Operation(summary = "Modify a user with an id")
-//    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "User updated")})
-//    public UserDTO updateUser(@PathVariable Long id, @RequestBody @Valid UserDTO userDTO) throws UniqueViolationException, ResourceNotFoundException {
-//        return userService.updateUserById(id, userDTO);
-//    }
-
     @PutMapping("/user")
     @Operation(summary = "Modify the information about the user who is currently logged in")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Data updated!")})

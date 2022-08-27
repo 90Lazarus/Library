@@ -15,4 +15,5 @@ public interface RentedRepository extends JpaRepository<Rented, Long> {
     Rented findByBook_IdAndDateReturnedIsNull(Long bookId);
     boolean existsByUser_IdAndBook_Id(Long userId, Long bookId);
     Rented findByUser_IdAndBook_Id(Long userId, Long bookId);
+    List<Rented> findByDateReturnedIsNull();
 }

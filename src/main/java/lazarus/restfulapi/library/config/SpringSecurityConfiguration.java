@@ -47,7 +47,6 @@ public class SpringSecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-
         httpSecurity.authenticationProvider(authenticationProvider());
         httpSecurity.cors().and().csrf().disable();
         httpSecurity.authorizeRequests()
@@ -56,8 +55,6 @@ public class SpringSecurityConfiguration {
                 //actuator
                 .antMatchers("/actuator/**").permitAll()
                 //users & rented
-                //.antMatchers("/login", "/login/").anonymous()
-                //.antMatchers("/logout", "/logout/").permitAll()
                 .antMatchers("/register", "/register/").anonymous()
                 .antMatchers("/forgot_password", "/forgot_password/").anonymous()
                 .antMatchers("/reset_password**").anonymous()
@@ -127,18 +124,6 @@ public class SpringSecurityConfiguration {
                 }))
                 .and()
                 .formLogin();
-//                .loginPage("/login")
-//                .defaultSuccessUrl("/user")
-//                .permitAll();
-        //login & logout
-//        httpSecurity.formLogin()
-//                .loginProcessingUrl("/login")
-//                .defaultSuccessUrl("/user")
-//                .failureUrl("/login")
-//                .and()
-//                .logout()
-//                .logoutUrl("/logout")
-//                .deleteCookies("JSESSIONID");
         return httpSecurity.build();
     }
 }

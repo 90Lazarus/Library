@@ -128,29 +128,6 @@ public class UserService {
         }
     }
 
-//    public UserDTO updateUserById(Long id, UserDTO newUserDTO) throws ResourceNotFoundException, UniqueViolationException {
-//        if (userRepository.findById(id).isPresent()) {
-//            User oldUser = userRepository.findById(id).get();
-//            User newUser = userMapper.userDTOToUser(newUserDTO);
-//            if (!(userRepository.existsByEmail(newUser.getEmail())) || (Objects.equals(newUser.getEmail(), oldUser.getEmail()))) {
-//                oldUser.setEmail(newUser.getEmail());
-//                oldUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
-//                oldUser.setFirstName(newUser.getFirstName());
-//                oldUser.setLastName(newUser.getLastName());
-//                oldUser.setDateOfBirth(newUser.getDateOfBirth());
-//                oldUser.setGender(newUser.getGender());
-//                oldUser.setAddress(newUser.getAddress());
-//                oldUser.setRole(newUser.getRole());
-//                userRepository.save(oldUser);
-//                return userMapper.userToUserDTO(oldUser);
-//            } else {
-//                throw new UniqueViolationException(ErrorInfo.ResourceType.EMAIL, newUser.getEmail());
-//            }
-//        } else {
-//            throw new ResourceNotFoundException(ErrorInfo.ResourceType.USER, id);
-//        }
-//    }
-
     public void deleteAUser(Long userId) throws ResourceNotFoundException {
         if (userRepository.findById(userId).isPresent()) {
             userRepository.deleteById(userId);
@@ -185,6 +162,7 @@ public class UserService {
                     oldUserData.setPassword(passwordEncoder.encode(newUserData.getPassword()));
                     oldUserData.setPasswordResetToken(new PasswordResetToken(null, null, null));
                     userRepository.save(oldUserData);
+                    log.info("User's password has been successfully reset!");
                     return userMapper.userToUserDTO(oldUserData);
                 } else {
                     throw new PasswordsDontMatchException(ErrorInfo.ResourceType.PASSWORDS);
