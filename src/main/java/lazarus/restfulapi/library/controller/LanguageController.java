@@ -42,14 +42,14 @@ public class LanguageController {
     }
 
     @GetMapping("/{languageId}/books")
-    @Operation(summary = "Retrieve all of the books in the database that are written in the genre with a specified id")
+    @Operation(summary = "Retrieve all of the books in the database that are written in the language with a specified id")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found books in the language!")})
     public List<BookDTO> getLanguageBooks(@Parameter(description = "Language's id") @PathVariable Long languageId) throws ResourceNotFoundException {
         return languageService.readLanguageBooks(languageId);
     }
 
     @GetMapping("/{languageId}/original/books")
-    @Operation(summary = "Retrieve all of the books in the database that were originally written in the genre with a specified id")
+    @Operation(summary = "Retrieve all of the books in the database that were originally written in the language with a specified id")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found books in the language!")})
     public List<BookDTO> getOriginalLanguageBooks(@Parameter(description = "Language's id") @PathVariable Long languageId) throws ResourceNotFoundException {
         return languageService.readOriginalLanguageBooks(languageId);

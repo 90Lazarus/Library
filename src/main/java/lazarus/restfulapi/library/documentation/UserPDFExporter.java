@@ -1,19 +1,20 @@
 package lazarus.restfulapi.library.documentation;
 
-import java.awt.Color;
+import com.lowagie.text.Font;
+import com.lowagie.text.*;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
+import lazarus.restfulapi.library.model.entity.User;
+import lombok.RequiredArgsConstructor;
+
+import javax.servlet.http.HttpServletResponse;
+import java.awt.*;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
-import javax.servlet.http.HttpServletResponse;
-
-import com.lowagie.text.*;
-import com.lowagie.text.pdf.*;
-import lazarus.restfulapi.library.model.entity.User;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class UserPDFExporter {
